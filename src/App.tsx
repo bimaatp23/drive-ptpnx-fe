@@ -1,5 +1,18 @@
 import { Stack } from '@mui/material'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import Dashboard from './pages/Dashboard'
 import Login from './pages/Login'
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <Dashboard/>,
+  },
+  {
+    path: '/login',
+    element: <Login/>,
+  }
+])
 
 export default function App() {
   return <Stack
@@ -10,6 +23,6 @@ export default function App() {
       background: '#f5f5f5'
     }}
   >
-    <Login/>
+    <RouterProvider router={router} />
   </Stack>
 }

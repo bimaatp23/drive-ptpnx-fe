@@ -18,7 +18,7 @@ export default function Login() {
         }}
     >
         <center>
-            <img src='logo.png' alt='Logo PTPNX' width={'70%'} />
+            <img src='logo.png' alt='Logo PTPNX' width={'70%'}/>
         </center>
         <TextField
             variant={'outlined'}

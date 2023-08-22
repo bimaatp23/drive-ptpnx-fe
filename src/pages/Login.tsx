@@ -1,12 +1,26 @@
 import { Button, Stack, TextField } from '@mui/material'
 import { ChangeEvent, useState } from 'react'
 import { LoginReq } from '../types/user/LoginReq'
+import { LoginUseCaseImpl } from '../usecase/user/LoginUseCase'
+import { LoginResp } from '../types/user/LoginResp'
 
 export default function Login() {
     const [loginReq, setLoginReq] = useState<LoginReq>({
         username: '',
         password: ''
     })
+
+    const doLogin = (): void => {
+        new LoginUseCaseImpl().execute(loginReq)
+            .subscribe({
+                next: (response: LoginResp) => {
+                    console.log(response)
+                },
+                error: (err) => {
+                    console.error(err)
+                }
+            })
+    }
 
     return <Stack
         position={'absolute'}
@@ -54,7 +68,7 @@ export default function Login() {
         <Button
             variant={'contained'}
             color={'primary'}
-            onClick={() => console.log(loginReq)}
+            onClick={() => doLogin()}
         >
             Login
         </Button>

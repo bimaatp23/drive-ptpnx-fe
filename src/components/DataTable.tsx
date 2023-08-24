@@ -43,28 +43,38 @@ export default function DataTable(props: Props) {
                 </TableRow>
             </TableHead>
             <TableBody>
-                {props.datas.map((data, index) => (
-                <TableRow key={index}>
-                    <TableCell 
-                        sx={{ fontWeight: 'bold' }}
-                        align={'center'}
-                    >
-                        {index + 1}
-                    </TableCell>
-                    <TableCell>
-                        {data.tanggal}
-                    </TableCell>
-                    <TableCell>
-                        {data.noDokumen}
-                    </TableCell>
-                    <TableCell>
-                        {data.keterangan}
-                    </TableCell>
-                    <TableCell>
-                        Action
-                    </TableCell>
-                </TableRow>
-                ))}
+                {props.datas.length > 0 ?
+                    props.datas.map((data, index) => 
+                        <TableRow key={index}>
+                            <TableCell 
+                                sx={{ fontWeight: 'bold' }}
+                                align={'center'}
+                            >
+                                {index + 1}
+                            </TableCell>
+                            <TableCell>
+                                {data.tanggal}
+                            </TableCell>
+                            <TableCell>
+                                {data.noDokumen}
+                            </TableCell>
+                            <TableCell>
+                                {data.keterangan}
+                            </TableCell>
+                            <TableCell>
+                                Action
+                            </TableCell>
+                        </TableRow>
+                    )
+                :
+                    <TableRow>
+                        <TableCell
+                            colSpan={5}
+                            align={'center'}
+                        >
+                            No Data Available
+                        </TableCell>
+                    </TableRow>}
             </TableBody>
         </Table>
     </TableContainer>

@@ -2,7 +2,7 @@ import { Observable, map } from 'rxjs'
 import { UserService } from '../../service/UserService'
 import { LoginReq } from '../../types/user/LoginReq'
 import { LoginResp } from '../../types/user/LoginResp'
-import { SessionUseCaseImpl } from '../SessionUseCase'
+import { SessionUseCaseImpl } from './SessionUseCase'
 
 export interface LoginUseCase {
     execute(loginReq: LoginReq): Observable<LoginResp>

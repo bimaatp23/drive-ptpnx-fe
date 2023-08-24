@@ -1,5 +1,5 @@
 import { Stack } from '@mui/material'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
 import Dashboard from './pages/Dashboard'
 import GantiPassword from './pages/GantiPassword'
 import Kasbon from './pages/Kasbon'
@@ -8,43 +8,50 @@ import Memorial from './pages/Memorial'
 import Neraca from './pages/Neraca'
 import Umum from './pages/Umum'
 import Upload from './pages/Upload'
-
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <Dashboard/>,
-  },
-  {
-    path: '/upload',
-    element: <Upload/>,
-  },
-  {
-    path: '/kasbon',
-    element: <Kasbon/>,
-  },
-  {
-    path: '/memorial',
-    element: <Memorial/>,
-  },
-  {
-    path: '/neraca',
-    element: <Neraca/>,
-  },
-  {
-    path: '/umum',
-    element: <Umum/>,
-  },
-  {
-    path: '/ganti-password',
-    element: <GantiPassword/>,
-  },
-  {
-    path: '/login',
-    element: <Login/>,
-  }
-])
+import { UseCaseFactory, UseCaseFactoryImpl } from './usecase/UseCaseFactory'
 
 export default function App() {
+  const useCaseFactory: UseCaseFactory = new UseCaseFactoryImpl()
+  
+  const isLogin = (): boolean => {
+    return useCaseFactory.createSessionUseCase().get().name !== null
+  }
+
+  const middlewareIsLogin = (path: string, element: JSX.Element): {
+    path: string,
+    element: JSX.Element
+  } => {
+    let returnElement: JSX.Element = element
+    if (!isLogin()) returnElement = <Navigate to={'/login'}/>
+    return {
+      path: path,
+      element: returnElement
+    }
+  }
+
+  const middlewareIsNotLogin = (path: string, element: JSX.Element): {
+    path: string,
+    element: JSX.Element
+  } => {
+    let returnElement: JSX.Element = element
+    if (isLogin()) returnElement = <Navigate to={'/'}/>
+    return {
+      path: path,
+      element: returnElement
+    }
+  }
+
+  const router = createBrowserRouter([
+    middlewareIsLogin('/', <Dashboard/>),
+    middlewareIsLogin('/upload', <Upload/>),
+    middlewareIsLogin('/kasbon', <Kasbon/>),
+    middlewareIsLogin('/memorial', <Memorial/>),
+    middlewareIsLogin('/neraca', <Neraca/>),
+    middlewareIsLogin('/umum', <Umum/>),
+    middlewareIsLogin('/ganti-password', <GantiPassword/>),
+    middlewareIsNotLogin('/login', <Login/>)
+  ])
+  
   return <Stack
     position={'fixed'}
     width={'100vw'}

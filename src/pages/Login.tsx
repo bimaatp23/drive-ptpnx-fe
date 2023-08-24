@@ -1,20 +1,21 @@
 import { Button, Stack, TextField } from '@mui/material'
 import { ChangeEvent, useState } from 'react'
 import { LoginReq } from '../types/user/LoginReq'
-import { LoginUseCaseImpl } from '../usecase/user/LoginUseCase'
 import { LoginResp } from '../types/user/LoginResp'
+import { UseCaseFactory, UseCaseFactoryImpl } from '../usecase/UseCaseFactory'
 
 export default function Login() {
+    const useCaseFactory: UseCaseFactory = new UseCaseFactoryImpl()
     const [loginReq, setLoginReq] = useState<LoginReq>({
         username: '',
         password: ''
     })
 
     const doLogin = (): void => {
-        new LoginUseCaseImpl().execute(loginReq)
+        useCaseFactory.createLoginUseCase().execute(loginReq)
             .subscribe({
                 next: (response: LoginResp) => {
-                    console.log(response)
+                    window.location.assign('/')
                 },
                 error: (err) => {
                     console.error(err)

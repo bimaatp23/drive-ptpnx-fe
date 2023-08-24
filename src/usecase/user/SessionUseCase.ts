@@ -1,5 +1,5 @@
-import { LoginResp } from '../types/user/LoginResp'
-import { User } from '../types/user/User'
+import { LoginResp } from '../../types/user/LoginResp'
+import { User } from '../../types/user/User'
 
 export interface SessionUseCase {
     save(loginResp: LoginResp): void

@@ -1,5 +1,6 @@
 import { Box, Button, Modal, Stack, Typography } from '@mui/material'
 import { useState } from 'react'
+import { UseCaseFactory, UseCaseFactoryImpl } from '../usecase/UseCaseFactory'
 
 interface Props {
     sidebarOpen: boolean
@@ -7,7 +8,13 @@ interface Props {
 }
 
 export default function Topbar(props: Props) {
+    const useCaseFactory: UseCaseFactory = new UseCaseFactoryImpl()
     const [modalOpen, setModalOpen] = useState<boolean>(false)
+
+    const doLogout = (): void => {
+        useCaseFactory.createSessionUseCase().clear()
+        window.location.assign('/login')
+    }
 
     return <Stack
         position={'relative'}
@@ -86,7 +93,7 @@ export default function Topbar(props: Props) {
                             borderRadius: 0,
                             paddingY: 2
                         }}
-                        onClick={() => {}}
+                        onClick={() => doLogout()}
                     >
                         <Typography
                             width={'100%'}

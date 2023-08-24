@@ -15,10 +15,11 @@ export default function Sidebar(props: Props) {
                 p: 0
             }}
         >
-            {param.map((data) => {
+            {param.map((data, index) => {
                 return <Stack
                     width={'100%'}
                     display={'flex'}
+                    key={index}
                 >
                     <Button
                         variant={'contained'}

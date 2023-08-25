@@ -33,7 +33,7 @@ const MainPage: FC<Props> = ({title, children}) => {
             <Typography
                 fontSize={40}
             >
-                {title}
+                {title.charAt(0).toUpperCase() + title.slice(1)}
             </Typography>
             {children}
         </Stack>

@@ -5,14 +5,20 @@ import { Data } from '../types/data/Data'
 import { GetDatasReq } from '../types/data/GetDatasReq'
 import { GetDatasResp } from '../types/data/GetDatasResp'
 import { UseCaseFactory, UseCaseFactoryImpl } from '../usecase/UseCaseFactory'
+import SearchControl from '../components/SearchControl'
+import { useParams } from 'react-router-dom'
 
-export default function Umum() {
+export default function DataPage() {
+    const {kategori} = useParams()
+    const currentDate: Date = new Date()
+    const sixMonthAgo: Date = new Date()
+    sixMonthAgo.setMonth(currentDate.getMonth() - 6)
     const useCaseFactory: UseCaseFactory = new UseCaseFactoryImpl()
     const [datas, setDatas] = useState<Data[]>([])
     const [getDatasReq, setGetDatasReq] = useState<GetDatasReq>({
-        kategori: 'umum',
-        tanggalFrom: '',
-        tanggalUntil: '',
+        kategori: kategori as string,
+        tanggalFrom: sixMonthAgo.toISOString().split('T')[0],
+        tanggalUntil: currentDate.toISOString().split('T')[0],
         keterangan: '',
         noDokumen: ''
     })
@@ -38,8 +44,14 @@ export default function Umum() {
     }
 
     return <MainPage
-        title='Umum'
+        title={kategori as string}
     >
+        <SearchControl
+            getDatasReq={getDatasReq}
+            setGetDatasReq={(value: GetDatasReq) => setGetDatasReq(value)}
+            doSearch={() => loadData()}
+        />
+        <br/>
         <DataTable
             datas={datas}
         />

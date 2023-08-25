@@ -4,11 +4,11 @@ import { GetDatasResp } from '../types/data/GetDatasResp'
 import { BaseService, BaseServiceImpl } from './BaseService'
 
 export class DataService {
-    readonly endPoint: string = 'http://localhost:3001/drive/api/data'
+    readonly endPoint: string = '/data'
     baseService: BaseService = new BaseServiceImpl()
 
     getByCategory(getDatasReq: GetDatasReq): Observable<GetDatasResp> {
-        return from(this.baseService.httpGet(this.endPoint + '/all/' + getDatasReq.kategori))
+        return from(this.baseService.httpPost(this.endPoint, getDatasReq))
             .pipe(
                 map((response) => response.data as GetDatasResp)
             )

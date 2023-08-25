@@ -11,13 +11,13 @@ import { useParams } from 'react-router-dom'
 export default function DataPage() {
     const {kategori} = useParams()
     const currentDate: Date = new Date()
-    const sixMonthAgo: Date = new Date()
-    sixMonthAgo.setMonth(currentDate.getMonth() - 6)
+    const aYearAgo: Date = new Date()
+    aYearAgo.setFullYear(currentDate.getFullYear() - 1)
     const useCaseFactory: UseCaseFactory = new UseCaseFactoryImpl()
     const [datas, setDatas] = useState<Data[]>([])
     const [getDatasReq, setGetDatasReq] = useState<GetDatasReq>({
         kategori: kategori as string,
-        tanggalFrom: sixMonthAgo.toISOString().split('T')[0],
+        tanggalFrom: aYearAgo.toISOString().split('T')[0],
         tanggalUntil: currentDate.toISOString().split('T')[0],
         keterangan: '',
         noDokumen: ''

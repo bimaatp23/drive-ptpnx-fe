@@ -1,12 +1,9 @@
 import { Stack } from '@mui/material'
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
 import Dashboard from './pages/Dashboard'
+import DataPage from './pages/DataPage'
 import GantiPassword from './pages/GantiPassword'
-import Kasbon from './pages/Kasbon'
 import Login from './pages/Login'
-import Memorial from './pages/Memorial'
-import Neraca from './pages/Neraca'
-import Umum from './pages/Umum'
 import Upload from './pages/Upload'
 import { UseCaseFactory, UseCaseFactoryImpl } from './usecase/UseCaseFactory'
 
@@ -44,10 +41,7 @@ export default function App() {
   const router = createBrowserRouter([
     middlewareIsLogin('/', <Dashboard/>),
     middlewareIsLogin('/upload', <Upload/>),
-    middlewareIsLogin('/kasbon', <Kasbon/>),
-    middlewareIsLogin('/memorial', <Memorial/>),
-    middlewareIsLogin('/neraca', <Neraca/>),
-    middlewareIsLogin('/umum', <Umum/>),
+    middlewareIsLogin('/:kategori', <DataPage/>),
     middlewareIsLogin('/ganti-password', <GantiPassword/>),
     middlewareIsNotLogin('/login', <Login/>)
   ])

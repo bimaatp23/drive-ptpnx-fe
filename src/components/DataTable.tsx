@@ -1,5 +1,5 @@
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
-import { Data } from '../types/data/Data'
+import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material"
+import { Data } from "../types/data/Data"
 
 interface Props {
     datas: Data[]
@@ -11,32 +11,32 @@ export default function DataTable(props: Props) {
             <TableHead>
                 <TableRow>
                     <TableCell
-                        sx={{ fontWeight: 'bold' }}
-                        align={'center'}
+                        sx={{ fontWeight: "bold" }}
+                        align={"center"}
                     >
                         #
                     </TableCell>
                     <TableCell
-                        sx={{ fontWeight: 'bold' }}
-                        align={'center'}
+                        sx={{ fontWeight: "bold" }}
+                        align={"center"}
                     >
                         Tanggal
                     </TableCell>
                     <TableCell
-                        sx={{ fontWeight: 'bold' }}
-                        align={'center'}
+                        sx={{ fontWeight: "bold" }}
+                        align={"center"}
                     >
                         No Dokumen
                     </TableCell>
                     <TableCell
-                        sx={{ fontWeight: 'bold' }}
-                        align={'center'}
+                        sx={{ fontWeight: "bold" }}
+                        align={"center"}
                     >
                         Keterangan
                     </TableCell>
                     <TableCell
-                        sx={{ fontWeight: 'bold' }}
-                        align={'center'}
+                        sx={{ fontWeight: "bold" }}
+                        align={"center"}
                     >
                         Action
                     </TableCell>
@@ -44,11 +44,11 @@ export default function DataTable(props: Props) {
             </TableHead>
             <TableBody>
                 {props.datas.length > 0 ?
-                    props.datas.map((data, index) => 
+                    props.datas.map((data, index) =>
                         <TableRow key={index}>
-                            <TableCell 
-                                sx={{ fontWeight: 'bold' }}
-                                align={'center'}
+                            <TableCell
+                                sx={{ fontWeight: "bold" }}
+                                align={"center"}
                             >
                                 {index + 1}
                             </TableCell>
@@ -66,11 +66,11 @@ export default function DataTable(props: Props) {
                             </TableCell>
                         </TableRow>
                     )
-                :
+                    :
                     <TableRow>
                         <TableCell
                             colSpan={5}
-                            align={'center'}
+                            align={"center"}
                         >
                             No Data Available
                         </TableCell>

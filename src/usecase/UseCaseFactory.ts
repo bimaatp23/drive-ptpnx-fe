@@ -1,6 +1,6 @@
-import { GetDatasUseCase, GetDatasUseCaseImpl } from './data/GetDatasUseCase'
-import { LoginUseCase, LoginUseCaseImpl } from './user/LoginUseCase'
-import { SessionUseCase, SessionUseCaseImpl } from './user/SessionUseCase'
+import { GetDatasUseCase, GetDatasUseCaseImpl } from "./data/GetDatasUseCase"
+import { LoginUseCase, LoginUseCaseImpl } from "./user/LoginUseCase"
+import { SessionUseCase, SessionUseCaseImpl } from "./user/SessionUseCase"
 
 export interface UseCaseFactory {
     createLoginUseCase(): LoginUseCase

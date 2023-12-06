@@ -1,6 +1,6 @@
-import { Box, Button, Modal, Stack, Typography } from '@mui/material'
-import { useState } from 'react'
-import { UseCaseFactory, UseCaseFactoryImpl } from '../usecase/UseCaseFactory'
+import { Box, Button, Modal, Stack, Typography } from "@mui/material"
+import { useState } from "react"
+import { UseCaseFactory, UseCaseFactoryImpl } from "../usecase/UseCaseFactory"
 
 interface Props {
     sidebarOpen: boolean
@@ -13,39 +13,39 @@ export default function Topbar(props: Props) {
 
     const doLogout = (): void => {
         useCaseFactory.createSessionUseCase().clear()
-        window.location.assign('/login')
+        window.location.assign("/login")
     }
 
     return <Stack
-        position={'relative'}
-        width={'100vw'}
-        height={'4rem'}
+        position={"relative"}
+        width={"100vw"}
+        height={"4rem"}
         sx={{
-            background: '#f0f0f0',
-            boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.3)'
+            background: "#f0f0f0",
+            boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.3)"
         }}
     >
         <Button
-            variant={'contained'}
-            color={'primary'}
+            variant={"contained"}
+            color={"primary"}
             sx={{
-                position: 'absolute',
-                top: '50%',
-                left: '1rem',
-                transform: 'translateY(-50%)'
+                position: "absolute",
+                top: "50%",
+                left: "1rem",
+                transform: "translateY(-50%)"
             }}
             onClick={() => props.setSidebarOpen(!props.sidebarOpen)}
         >
             Menu
         </Button>
         <Button
-            variant={'outlined'}
-            color={'primary'}
+            variant={"outlined"}
+            color={"primary"}
             sx={{
-                position: 'absolute',
-                top: '50%',
-                right: '1rem',
-                transform: 'translateY(-50%)'
+                position: "absolute",
+                top: "50%",
+                right: "1rem",
+                transform: "translateY(-50%)"
             }}
             onClick={() => setModalOpen(!modalOpen)}
         >
@@ -56,39 +56,39 @@ export default function Topbar(props: Props) {
             onClose={() => setModalOpen(!modalOpen)}
         >
             <Box
-                position={'fixed'}
-                width={'17vw'}
-                minWidth={'15rem'}
-                top={'4rem'}
+                position={"fixed"}
+                width={"17vw"}
+                minWidth={"15rem"}
+                top={"4rem"}
                 right={0}
                 sx={{
                     borderRadius: 2,
-                    overflow: 'hidden'
+                    overflow: "hidden"
                 }}
             >
                 <Stack
-                    width={'100%'}
-                    display={'flex'}
+                    width={"100%"}
+                    display={"flex"}
                 >
                     <Button
-                        variant={'contained'}
-                        color={'success'}
+                        variant={"contained"}
+                        color={"success"}
                         sx={{
                             borderRadius: 0,
                             paddingY: 2
                         }}
-                        onClick={() => window.location.assign('/ganti-password')}
+                        onClick={() => window.location.assign("/ganti-password")}
                     >
                         <Typography
-                            width={'100%'}
-                            textAlign={'left'}
+                            width={"100%"}
+                            textAlign={"left"}
                         >
                             Ganti Password
                         </Typography>
                     </Button>
                     <Button
-                        variant={'contained'}
-                        color={'error'}
+                        variant={"contained"}
+                        color={"error"}
                         sx={{
                             borderRadius: 0,
                             paddingY: 2
@@ -96,8 +96,8 @@ export default function Topbar(props: Props) {
                         onClick={() => doLogout()}
                     >
                         <Typography
-                            width={'100%'}
-                            textAlign={'left'}
+                            width={"100%"}
+                            textAlign={"left"}
                         >
                             Logout
                         </Typography>

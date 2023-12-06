@@ -3,5 +3,5 @@ export interface BaseResp {
         errorCode: number
         errorMessage: string
     }
-    outputSchema?: any 
+    outputSchema?: any
 }

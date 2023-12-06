@@ -1,8 +1,8 @@
-import MainPage from '../components/MainPage'
+import MainPage from "../components/MainPage"
 
 export default function Upload() {
     return <MainPage
-        title='Upload'
+        title="Upload"
     >
     </MainPage>
 }

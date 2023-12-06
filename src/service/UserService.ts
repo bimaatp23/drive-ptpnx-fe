@@ -4,7 +4,7 @@ import { LoginReq } from '../types/user/LoginReq'
 import { LoginResp } from '../types/user/LoginResp'
 
 export class UserService {
-    readonly endPoint: string = 'http://localhost:3001/drive/api/user'
+    readonly endPoint = process.env.REACT_APP_API_ENDPOINT + "/user"
 
     login(loginReq: LoginReq): Observable<LoginResp> {
         return from(axios.post(this.endPoint + '/login', loginReq))

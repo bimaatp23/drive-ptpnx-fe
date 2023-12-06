@@ -1,14 +1,14 @@
-import { Stack, Typography } from '@mui/material'
-import { FC, ReactNode, useState } from 'react'
-import Sidebar from './Sidebar'
-import Topbar from './Topbar'
+import { Stack, Typography } from "@mui/material"
+import { FC, ReactNode, useState } from "react"
+import Sidebar from "./Sidebar"
+import Topbar from "./Topbar"
 
 interface Props {
     title: string
     children: ReactNode
 }
 
-const MainPage: FC<Props> = ({title, children}) => {
+const MainPage: FC<Props> = ({ title, children }) => {
     const [sidebarOpen, setSidebarOpen] = useState<boolean>(false)
 
     return <Stack>
@@ -21,13 +21,13 @@ const MainPage: FC<Props> = ({title, children}) => {
             setSidebarOpen={(value: boolean) => setSidebarOpen(value)}
         />
         <Stack
-            position={'absolute'}
-            width={'calc(100vw - 2rem)'}
-            height={'calc(100vh - 5rem)'}
-            top={'4.5rem'}
-            left={'50%'}
+            position={"absolute"}
+            width={"calc(100vw - 2rem)"}
+            height={"calc(100vh - 5rem)"}
+            top={"4.5rem"}
+            left={"50%"}
             sx={{
-                transform:'translateX(-50%)'
+                transform: "translateX(-50%)"
             }}
         >
             <Typography

@@ -1,8 +1,8 @@
-import MainPage from '../components/MainPage'
+import MainPage from "../components/MainPage"
 
 export default function Dashboard() {
     return <MainPage
-        title='Dashboard'
+        title="Dashboard"
     >
     </MainPage>
 }

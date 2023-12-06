@@ -1,7 +1,7 @@
-import { Observable } from 'rxjs'
-import { DataService } from '../../service/DataService'
-import { GetDatasReq } from '../../types/data/GetDatasReq'
-import { GetDatasResp } from '../../types/data/GetDatasResp'
+import { Observable } from "rxjs"
+import { DataService } from "../../service/DataService"
+import { GetDatasReq } from "../../types/data/GetDatasReq"
+import { GetDatasResp } from "../../types/data/GetDatasResp"
 
 export interface GetDatasUseCase {
     execute(getDatasReq: GetDatasReq): Observable<GetDatasResp>

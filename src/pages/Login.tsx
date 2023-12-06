@@ -24,10 +24,10 @@ export default function Login() {
     }
 
     return <Stack
-        position={"absolute"}
-        top={"50%"}
-        left={"50%"}
-        width={"20vw"}
+        position="absolute"
+        top="50%"
+        left="50%"
+        width="20vw"
         sx={{
             transform: "translate(-50%, -50%)"
         }}
@@ -51,10 +51,10 @@ export default function Login() {
             }}
         />
         <TextField
-            variant={"outlined"}
-            size={"small"}
-            label={"Password"}
-            type={"password"}
+            variant="outlined"
+            size="small"
+            label="Password"
+            type="password"
             value={loginReq.password}
             onChange={(event: ChangeEvent<HTMLInputElement>) => {
                 setLoginReq({
@@ -67,8 +67,8 @@ export default function Login() {
             }}
         />
         <Button
-            variant={"contained"}
-            color={"primary"}
+            variant="contained"
+            color="primary"
             onClick={() => doLogin()}
         >
             Login

@@ -11,6 +11,6 @@ export function setNotification(props: setNotificationProps) {
         title: message,
         icon: icon,
         showConfirmButton: false,
-        timer: 3000
+        timer: 5000
     })
 }

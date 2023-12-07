@@ -19,7 +19,7 @@ export default function Topbar(props: Props) {
     return <Stack
         position={"relative"}
         width={"100vw"}
-        height={"4rem"}
+        height={"3.5rem"}
         sx={{
             background: "#f0f0f0",
             boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.3)"

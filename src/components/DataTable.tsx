@@ -1,4 +1,5 @@
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material"
+import moment from "moment"
 import { Data } from "../types/data/Data"
 
 interface Props {
@@ -53,7 +54,7 @@ export default function DataTable(props: Props) {
                                 {index + 1}
                             </TableCell>
                             <TableCell>
-                                {data.tanggal}
+                                {moment(data.tanggal, "YYYY-MM-DD").format("DD/MM/YYYY")}
                             </TableCell>
                             <TableCell>
                                 {data.noDokumen}

@@ -1,5 +1,7 @@
+import moment from "moment"
 import { useEffect, useMemo, useState } from "react"
 import { useParams } from "react-router-dom"
+import { setNotification } from "../Util"
 import DataTable from "../components/DataTable"
 import MainPage from "../components/MainPage"
 import SearchControl from "../components/SearchControl"
@@ -20,8 +22,8 @@ export default function DataPage() {
     const [datas, setDatas] = useState<Data[]>([])
     const [getDatasReq, setGetDatasReq] = useState<GetDatasReq>({
         kategori: kategori as string,
-        tanggalFrom: aYearAgo.toISOString().split("T")[0],
-        tanggalUntil: currentDate.toISOString().split("T")[0],
+        tanggalFrom: moment(aYearAgo).format("YYYY-MM-DD"),
+        tanggalUntil: moment(currentDate).format("YYYY-MM-DD"),
         keterangan: "",
         noDokumen: ""
     })
@@ -33,8 +35,8 @@ export default function DataPage() {
         if (isStatic) {
             const firstGetDatasReq: GetDatasReq = {
                 kategori: kategori as string,
-                tanggalFrom: aYearAgo.toISOString().split("T")[0],
-                tanggalUntil: currentDate.toISOString().split("T")[0],
+                tanggalFrom: moment(aYearAgo).format("YYYY-MM-DD"),
+                tanggalUntil: moment(currentDate).format("YYYY-MM-DD"),
                 keterangan: "",
                 noDokumen: ""
             }
@@ -45,8 +47,11 @@ export default function DataPage() {
                             setDatas(response.outputSchema)
                         }
                     },
-                    error: (err) => {
-                        console.error(err)
+                    error: (error) => {
+                        setNotification({
+                            icon: "error",
+                            message: error.response.data.errorSchema.errorMessage
+                        })
                     }
                 })
         }
@@ -60,8 +65,11 @@ export default function DataPage() {
                         setDatas(response.outputSchema)
                     }
                 },
-                error: (err) => {
-                    console.error(err)
+                error: (error) => {
+                    setNotification({
+                        icon: "error",
+                        message: error.response.data.errorSchema.errorMessage
+                    })
                 }
             })
     }

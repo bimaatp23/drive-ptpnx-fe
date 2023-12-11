@@ -1,5 +1,6 @@
 import { Button, Stack, TextField } from "@mui/material"
 import { ChangeEvent, useState } from "react"
+import { setNotification } from "../Util"
 import { LoginReq } from "../types/user/LoginReq"
 import { LoginResp } from "../types/user/LoginResp"
 import { UseCaseFactory, UseCaseFactoryImpl } from "../usecase/UseCaseFactory"
@@ -17,8 +18,11 @@ export default function Login() {
                 next: (response: LoginResp) => {
                     window.location.assign("/")
                 },
-                error: (err) => {
-                    console.error(err)
+                error: (error) => {
+                    setNotification({
+                        icon: "error",
+                        message: error.response.data.errorSchema.errorMessage
+                    })
                 }
             })
     }

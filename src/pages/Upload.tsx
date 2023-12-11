@@ -2,16 +2,19 @@ import { Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, S
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers"
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns"
 import moment from "moment"
-import { ChangeEvent, useState } from "react"
+import { ChangeEvent, useMemo, useState } from "react"
 import { setNotification } from "../Util"
 import ImageViewer from "../components/ImageViewer"
 import MainPage from "../components/MainPage"
 import PDFViewer from "../components/PDFViewer"
+import { BaseResp } from "../types/BaseResp"
 import BasicConstant from "../types/BasicConstant"
 import { UploadDataReq } from "../types/data/UploadDataReq"
+import { UseCaseFactory, UseCaseFactoryImpl } from "../usecase/UseCaseFactory"
 
 export default function Upload() {
-    const [request, setRequest] = useState<UploadDataReq>({
+    const useCaseFactory: UseCaseFactory = useMemo(() => new UseCaseFactoryImpl(), [])
+    const [uploadDataReq, setUploadDataReq] = useState<UploadDataReq>({
         tanggal: moment().format("YYYY-MM-DD"),
         noDokumen: "",
         keterangan: "",
@@ -22,8 +25,8 @@ export default function Upload() {
 
     const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent<any>): void => {
         const { name, value } = e.target
-        setRequest({
-            ...request,
+        setUploadDataReq({
+            ...uploadDataReq,
             [name]: value
         })
     }
@@ -38,8 +41,8 @@ export default function Upload() {
             const selectedFile = files[0]
             const allowedTypes: string[] = ["application/pdf", "image/png", "image/jpeg", "image/jpg"]
             if (allowedTypes.includes(selectedFile.type)) {
-                setRequest({
-                    ...request,
+                setUploadDataReq({
+                    ...uploadDataReq,
                     [name]: selectedFile
                 })
                 setFileValue(value)
@@ -48,8 +51,8 @@ export default function Upload() {
                     icon: "info",
                     message: `Hanya file PDF, PNG, JPEG, atau JPG yang diizinkan. Anda memilih: ${selectedFile.type}`
                 })
-                setRequest({
-                    ...request,
+                setUploadDataReq({
+                    ...uploadDataReq,
                     [name]: undefined
                 })
                 setFileValue("")
@@ -57,6 +60,25 @@ export default function Upload() {
         } catch (error) {
             console.error("Error handling file:", error)
         }
+    }
+
+    const handleUpload = (): void => {
+        useCaseFactory.createUploadDataUseCase().execute(uploadDataReq)
+            .subscribe({
+                next: (response: BaseResp) => {
+                    setNotification({
+                        icon: "success",
+                        message: response.errorSchema.errorMessage
+                    })
+                    window.location.assign("/" + uploadDataReq.kategori)
+                },
+                error: (error) => {
+                    setNotification({
+                        icon: "error",
+                        message: error.response.data.errorSchema.errorMessage
+                    })
+                }
+            })
     }
 
     return <MainPage
@@ -72,11 +94,11 @@ export default function Upload() {
                 <DatePicker
                     label="Tanggal"
                     format="dd/MM/yyyy"
-                    value={new Date(request.tanggal)}
+                    value={new Date(uploadDataReq.tanggal)}
                     onChange={(value: Date | null) => {
                         if (value) {
-                            setRequest({
-                                ...request,
+                            setUploadDataReq({
+                                ...uploadDataReq,
                                 tanggal: moment(value).format("YYYY-MM-DD")
                             })
                         }
@@ -94,7 +116,7 @@ export default function Upload() {
                 name="noDokumen"
                 label="No Dokumen"
                 size="small"
-                value={request.noDokumen}
+                value={uploadDataReq.noDokumen}
                 onChange={handleChange}
                 fullWidth
                 sx={{ background: "white" }}
@@ -103,7 +125,7 @@ export default function Upload() {
                 name="keterangan"
                 label="Keterangan"
                 size="small"
-                value={request.keterangan}
+                value={uploadDataReq.keterangan}
                 onChange={handleChange}
                 fullWidth
                 sx={{ background: "white" }}
@@ -114,7 +136,7 @@ export default function Upload() {
                     name="kategori"
                     label="Kategori"
                     size="small"
-                    value={request.kategori}
+                    value={uploadDataReq.kategori}
                     onChange={handleChange}
                     labelId="label-kategori"
                     sx={{ background: "white" }}
@@ -138,19 +160,19 @@ export default function Upload() {
             <Button
                 variant="contained"
                 fullWidth
-                onClick={() => console.log(request)}
+                onClick={handleUpload}
             >
                 Upload
             </Button>
         </Stack>
-        {request.file ?
+        {uploadDataReq.file ?
             <Stack
                 maxWidth="100%"
                 maxHeight="calc(100vh - 12rem)"
                 border={2}
                 borderColor="#808080"
             >
-                {request.file.type.startsWith("image/") ? <ImageViewer file={request.file} /> : <PDFViewer file={request.file} />}
+                {uploadDataReq.file.type.startsWith("image/") ? <ImageViewer file={uploadDataReq.file} /> : <PDFViewer file={uploadDataReq.file} />}
             </Stack>
             :
             <Typography>No File Uploaded</Typography>

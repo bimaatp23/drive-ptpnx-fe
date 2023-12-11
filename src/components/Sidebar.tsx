@@ -17,13 +17,13 @@ export default function Sidebar(props: Props) {
         >
             {param.map((data, index) => {
                 return <Stack
-                    width={"100%"}
-                    display={"flex"}
+                    width="100%"
+                    display="flex"
                     key={index}
                 >
                     <Button
-                        variant={"contained"}
-                        color={"primary"}
+                        variant="contained"
+                        color="primary"
                         sx={{
                             borderRadius: 0,
                             paddingY: 2
@@ -31,8 +31,8 @@ export default function Sidebar(props: Props) {
                         onClick={() => window.location.assign(data.path)}
                     >
                         <Typography
-                            width={"100%"}
-                            textAlign={"left"}
+                            width="100%"
+                            textAlign="left"
                         >
                             {data.label}
                         </Typography>
@@ -47,23 +47,23 @@ export default function Sidebar(props: Props) {
         onClose={() => props.setSidebarOpen(false)}
     >
         <Stack
-            width={"17vw"}
-            minWidth={"15rem"}
-            height={"100vh"}
+            width="17vw"
+            minWidth="15rem"
+            height="100vh"
             sx={{
                 background: "#f0f0f0"
             }}
         >
             <Stack
-                height={"4rem"}
-                display={"flex"}
+                height="4rem"
+                display="flex"
                 sx={{
                     justifyContent: "center",
                     alignItems: "center"
                 }}
                 onClick={() => window.location.assign("/")}
             >
-                <img src="logo.png" alt="Logo PTPNX" width={"45%"} />
+                <img src="logo.png" alt="Logo PTPNX" width="45%" />
             </Stack>
             {Item([
                 {

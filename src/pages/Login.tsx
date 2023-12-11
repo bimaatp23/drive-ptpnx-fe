@@ -21,7 +21,7 @@ export default function Login() {
                 error: (error) => {
                     setNotification({
                         icon: "error",
-                        message: error.response.data.errorSchema.errorMessage
+                        message: error.response.data.errorSchema?.errorMessage ?? error.response.statusText
                     })
                 }
             })
@@ -37,12 +37,12 @@ export default function Login() {
         }}
     >
         <center>
-            <img src="logo.png" alt="Logo PTPNX" width={"70%"} />
+            <img src="logo.png" alt="Logo PTPNX" width="70%" />
         </center>
         <TextField
-            variant={"outlined"}
-            size={"small"}
-            label={"Username"}
+            variant="outlined"
+            size="small"
+            label="Username"
             value={loginReq.username}
             onChange={(event: ChangeEvent<HTMLInputElement>) => {
                 setLoginReq({

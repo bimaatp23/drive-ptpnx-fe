@@ -21,11 +21,11 @@ const MainPage: FC<Props> = ({ title, children }) => {
             setSidebarOpen={(value: boolean) => setSidebarOpen(value)}
         />
         <Stack
-            position={"absolute"}
-            width={"calc(100vw - 2rem)"}
-            height={"calc(100vh - 5rem)"}
-            top={"4rem"}
-            left={"50%"}
+            position="absolute"
+            width="calc(100vw - 2rem)"
+            height="calc(100vh - 5rem)"
+            top="4rem"
+            left="50%"
             sx={{
                 transform: "translateX(-50%)"
             }}

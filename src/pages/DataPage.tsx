@@ -50,7 +50,7 @@ export default function DataPage() {
                     error: (error) => {
                         setNotification({
                             icon: "error",
-                            message: error.response.data.errorSchema.errorMessage
+                            message: error.response.data.errorSchema?.errorMessage ?? error.response.statusText
                         })
                     }
                 })
@@ -68,7 +68,7 @@ export default function DataPage() {
                 error: (error) => {
                     setNotification({
                         icon: "error",
-                        message: error.response.data.errorSchema.errorMessage
+                        message: error.response.data.errorSchema?.errorMessage ?? error.response.statusText
                     })
                 }
             })

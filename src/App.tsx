@@ -19,7 +19,7 @@ export default function App() {
     element: JSX.Element
   } => {
     let returnElement: JSX.Element = element
-    if (!isLogin()) returnElement = <Navigate to={"/login"} />
+    if (!isLogin()) returnElement = <Navigate to="/login" />
     return {
       path: path,
       element: returnElement
@@ -31,7 +31,7 @@ export default function App() {
     element: JSX.Element
   } => {
     let returnElement: JSX.Element = element
-    if (isLogin()) returnElement = <Navigate to={"/"} />
+    if (isLogin()) returnElement = <Navigate to="/" />
     return {
       path: path,
       element: returnElement
@@ -47,9 +47,9 @@ export default function App() {
   ])
 
   return <Stack
-    position={"fixed"}
-    width={"100vw"}
-    height={"100vh"}
+    position="fixed"
+    width="100vw"
+    height="100vh"
     sx={{
       background: "#f5f5f5"
     }}

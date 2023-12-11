@@ -11,9 +11,9 @@ interface Props {
 export default function SearchControl(props: Props) {
     const displayTanggalFrom = () => {
         return <TextField
-            label={"Tanggal From"}
-            type={"date"}
-            size={"small"}
+            label="Tanggal From"
+            type="date"
+            size="small"
             fullWidth={true}
             defaultValue={props.getDatasReq.tanggalFrom}
             onChange={(event: ChangeEvent<HTMLInputElement>) => props.setGetDatasReq({
@@ -31,9 +31,9 @@ export default function SearchControl(props: Props) {
 
     const displayTanggalUntil = () => {
         return <TextField
-            label={"Tanggal Until"}
-            type={"date"}
-            size={"small"}
+            label="Tanggal Until"
+            type="date"
+            size="small"
             fullWidth={true}
             defaultValue={props.getDatasReq.tanggalUntil}
             onChange={(event: ChangeEvent<HTMLInputElement>) => props.setGetDatasReq({
@@ -51,8 +51,8 @@ export default function SearchControl(props: Props) {
 
     const displayNoDokumen = () => {
         return <TextField
-            label={"No Dokumen"}
-            size={"small"}
+            label="No Dokumen"
+            size="small"
             fullWidth={true}
             defaultValue={props.getDatasReq.noDokumen}
             onChange={(event: ChangeEvent<HTMLInputElement>) => props.setGetDatasReq({
@@ -67,8 +67,8 @@ export default function SearchControl(props: Props) {
 
     const displayKeterangan = () => {
         return <TextField
-            label={"Keterangan"}
-            size={"small"}
+            label="Keterangan"
+            size="small"
             fullWidth={true}
             defaultValue={props.getDatasReq.keterangan}
             onChange={(event: ChangeEvent<HTMLInputElement>) => props.setGetDatasReq({
@@ -83,8 +83,8 @@ export default function SearchControl(props: Props) {
 
     const displaySearchButton = () => {
         return <Button
-            variant={"contained"}
-            color={"primary"}
+            variant="contained"
+            color="primary"
             onClick={() => props.doSearch()}
         >
             Search
@@ -92,7 +92,7 @@ export default function SearchControl(props: Props) {
     }
 
     return <Stack>
-        <Grid container width={"100%"} columnSpacing={2}>
+        <Grid container width="100%" columnSpacing={2}>
             <Grid item sm={2}>
                 {displayTanggalFrom()}
             </Grid>

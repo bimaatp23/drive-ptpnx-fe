@@ -22,4 +22,14 @@ export class DataService {
                 map((response) => response.data as BaseResp)
             )
     }
+
+    download(id: string): Observable<string> {
+        return from(this.baseService.httpGet(this.endPoint + "/" + id, { responseType: 'arraybuffer' }))
+            .pipe(
+                map((response) => {
+                    const blob = new Blob([response.data], { type: 'application/octet-stream' });
+                    return window.URL.createObjectURL(blob);
+                })
+            );
+    }
 }

@@ -1,3 +1,4 @@
+import { DownloadFileUseCase, DownloadFileUseCaseImpl } from "./data/DownloadFileUseCase"
 import { GetDatasUseCase, GetDatasUseCaseImpl } from "./data/GetDatasUseCase"
 import { UploadDataUseCase, UploadDataUseCaseImpl } from "./data/UploadDataUseCase"
 import { LoginUseCase, LoginUseCaseImpl } from "./user/LoginUseCase"
@@ -8,6 +9,7 @@ export interface UseCaseFactory {
     createSessionUseCase(): SessionUseCase
     createGetDatasUseCase(): GetDatasUseCase
     createUploadDataUseCase(): UploadDataUseCase
+    createDownloadFileUseCase(): DownloadFileUseCase
 }
 
 export class UseCaseFactoryImpl implements UseCaseFactory {
@@ -22,5 +24,8 @@ export class UseCaseFactoryImpl implements UseCaseFactory {
     }
     createUploadDataUseCase(): UploadDataUseCase {
         return new UploadDataUseCaseImpl()
+    }
+    createDownloadFileUseCase(): DownloadFileUseCase {
+        return new DownloadFileUseCaseImpl()
     }
 }

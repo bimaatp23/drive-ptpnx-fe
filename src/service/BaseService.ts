@@ -25,7 +25,8 @@ export class BaseServiceImpl implements BaseService {
         const defaultConfig: AxiosRequestConfig<any> = {
             ...config,
             headers: {
-                Authorization: "Bearer " + this.useCaseFactory.createSessionUseCase().getToken()
+                Authorization: "Bearer " + this.useCaseFactory.createSessionUseCase().getToken(),
+                "Content-Type": "multipart/form-data"
             }
         }
         return axios.post(this.endPoint + url, data, defaultConfig)

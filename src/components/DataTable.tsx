@@ -1,25 +1,45 @@
-import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material"
+import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material"
 import moment from "moment"
-import { useMemo } from "react"
+import { useMemo, useState } from "react"
 import { setNotification } from "../Util"
 import { Data } from "../types/data/Data"
 import { UseCaseFactory, UseCaseFactoryImpl } from "../usecase/UseCaseFactory"
+import CustomModal from "./CustomModal"
 
 interface Props {
     datas: Data[]
 }
 
+
+
 export default function DataTable(props: Props) {
     const useCaseFactory: UseCaseFactory = useMemo(() => new UseCaseFactoryImpl(), [])
 
-    const handleDownload = (filename: string): void => {
-        useCaseFactory.createDownloadFileUseCase().execute(filename.split(".")[0])
+    const [isEditModalOpen, setIsModalEditOpen] = useState<boolean>(false)
+
+    const displayEditModal = () => {
+        return <CustomModal
+            open={isEditModalOpen}
+            onClose={() => setIsModalEditOpen(false)}
+        >
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+                Text in a modal
+            </Typography>
+            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+            </Typography>
+        </CustomModal>
+    }
+
+    const handleDownload = (data: Data): void => {
+        const { id, file, documentNumber } = data
+        useCaseFactory.createDownloadFileUseCase().execute(id)
             .subscribe({
                 next: (response: string) => {
                     console.log(response)
                     let downloadLink = document.createElement("a")
                     downloadLink.href = response
-                    downloadLink.download = filename
+                    downloadLink.download = [documentNumber, file.split(".")[1]].join(".")
                     downloadLink.text = "link"
                     downloadLink.click()
                 },
@@ -33,6 +53,7 @@ export default function DataTable(props: Props) {
     }
 
     return <TableContainer component={Paper}>
+        {displayEditModal()}
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
                 <TableRow>
@@ -79,18 +100,24 @@ export default function DataTable(props: Props) {
                                 {index + 1}
                             </TableCell>
                             <TableCell>
-                                {moment(data.tanggal, "YYYY-MM-DD").format("DD/MM/YYYY")}
+                                {moment(data.date, "YYYY-MM-DD").format("DD/MM/YYYY")}
                             </TableCell>
                             <TableCell>
-                                {data.noDokumen}
+                                {data.documentNumber}
                             </TableCell>
                             <TableCell>
-                                {data.keterangan}
+                                {data.description}
                             </TableCell>
                             <TableCell>
                                 <Button
                                     variant="contained"
-                                    onClick={() => handleDownload(data.file)}
+                                    onClick={() => setIsModalEditOpen(true)}
+                                >
+                                    Edit
+                                </Button>
+                                <Button
+                                    variant="contained"
+                                    onClick={() => handleDownload(data)}
                                 >
                                     Download
                                 </Button>

@@ -41,7 +41,7 @@ export default function App() {
   const router = createBrowserRouter([
     middlewareIsLogin("/", <Dashboard />),
     middlewareIsLogin("/upload", <Upload />),
-    middlewareIsLogin("/:kategori", <DataPage />),
+    middlewareIsLogin("/:category", <DataPage />),
     middlewareIsLogin("/ganti-password", <GantiPassword />),
     middlewareIsNotLogin("/login", <Login />)
   ])

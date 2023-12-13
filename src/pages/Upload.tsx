@@ -15,10 +15,10 @@ import { UseCaseFactory, UseCaseFactoryImpl } from "../usecase/UseCaseFactory"
 export default function Upload() {
     const useCaseFactory: UseCaseFactory = useMemo(() => new UseCaseFactoryImpl(), [])
     const [uploadDataReq, setUploadDataReq] = useState<UploadDataReq>({
-        tanggal: moment().format("YYYY-MM-DD"),
-        noDokumen: "",
-        keterangan: "",
-        kategori: "",
+        date: moment().format("YYYY-MM-DD"),
+        documentNumber: "",
+        description: "",
+        category: "",
         file: undefined
     })
     const [fileValue, setFileValue] = useState<string>("")
@@ -70,7 +70,7 @@ export default function Upload() {
                         icon: "success",
                         message: response.errorSchema.errorMessage
                     })
-                    window.location.assign("/" + uploadDataReq.kategori)
+                    window.location.assign("/" + uploadDataReq.category)
                 },
                 error: (error) => {
                     setNotification({
@@ -94,12 +94,12 @@ export default function Upload() {
                 <DatePicker
                     label="Tanggal"
                     format="dd/MM/yyyy"
-                    value={new Date(uploadDataReq.tanggal)}
+                    value={new Date(uploadDataReq.date)}
                     onChange={(value: Date | null) => {
                         if (value) {
                             setUploadDataReq({
                                 ...uploadDataReq,
-                                tanggal: moment(value).format("YYYY-MM-DD")
+                                date: moment(value).format("YYYY-MM-DD")
                             })
                         }
                     }}
@@ -113,19 +113,19 @@ export default function Upload() {
                 />
             </LocalizationProvider>
             <TextField
-                name="noDokumen"
+                name="documentNumber"
                 label="No Dokumen"
                 size="small"
-                value={uploadDataReq.noDokumen}
+                value={uploadDataReq.documentNumber}
                 onChange={handleChange}
                 fullWidth
                 sx={{ background: "white" }}
             />
             <TextField
-                name="keterangan"
+                name="description"
                 label="Keterangan"
                 size="small"
-                value={uploadDataReq.keterangan}
+                value={uploadDataReq.description}
                 onChange={handleChange}
                 fullWidth
                 sx={{ background: "white" }}
@@ -133,10 +133,10 @@ export default function Upload() {
             <FormControl fullWidth>
                 <InputLabel id="label-kategori" size="small">Kategori</InputLabel>
                 <Select
-                    name="kategori"
+                    name="category"
                     label="Kategori"
                     size="small"
-                    value={uploadDataReq.kategori}
+                    value={uploadDataReq.category}
                     onChange={handleChange}
                     labelId="label-kategori"
                     sx={{ background: "white" }}

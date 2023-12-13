@@ -11,7 +11,7 @@ import { GetDatasResp } from "../types/data/GetDatasResp"
 import { UseCaseFactory, UseCaseFactoryImpl } from "../usecase/UseCaseFactory"
 
 export default function DataPage() {
-    const { kategori } = useParams()
+    const { category } = useParams()
     const useCaseFactory: UseCaseFactory = useMemo(() => new UseCaseFactoryImpl(), [])
     const currentDate: Date = useMemo(() => new Date(), [])
     const aYearAgo: Date = useMemo(() => {
@@ -21,11 +21,11 @@ export default function DataPage() {
     }, [currentDate])
     const [datas, setDatas] = useState<Data[]>([])
     const [getDatasReq, setGetDatasReq] = useState<GetDatasReq>({
-        kategori: kategori as string,
-        tanggalFrom: moment(aYearAgo).format("YYYY-MM-DD"),
-        tanggalUntil: moment(currentDate).format("YYYY-MM-DD"),
-        keterangan: "",
-        noDokumen: ""
+        category: category as string,
+        dateFrom: moment(aYearAgo).format("YYYY-MM-DD"),
+        dateUntil: moment(currentDate).format("YYYY-MM-DD"),
+        description: "",
+        documentNumber: ""
     })
 
     const [isStatic, setIsStatic] = useState<boolean>(false)
@@ -34,11 +34,11 @@ export default function DataPage() {
     useEffect(() => {
         if (isStatic) {
             const firstGetDatasReq: GetDatasReq = {
-                kategori: kategori as string,
-                tanggalFrom: moment(aYearAgo).format("YYYY-MM-DD"),
-                tanggalUntil: moment(currentDate).format("YYYY-MM-DD"),
-                keterangan: "",
-                noDokumen: ""
+                category: category as string,
+                dateFrom: moment(aYearAgo).format("YYYY-MM-DD"),
+                dateUntil: moment(currentDate).format("YYYY-MM-DD"),
+                description: "",
+                documentNumber: ""
             }
             useCaseFactory.createGetDatasUseCase().execute(firstGetDatasReq)
                 .subscribe({
@@ -55,7 +55,7 @@ export default function DataPage() {
                     }
                 })
         }
-    }, [isStatic, useCaseFactory, kategori, currentDate, aYearAgo])
+    }, [isStatic, useCaseFactory, category, currentDate, aYearAgo])
 
     const loadData = (): void => {
         useCaseFactory.createGetDatasUseCase().execute(getDatasReq)
@@ -75,7 +75,7 @@ export default function DataPage() {
     }
 
     return <MainPage
-        title={kategori as string}
+        title={category as string}
     >
         <SearchControl
             getDatasReq={getDatasReq}

@@ -15,10 +15,10 @@ export default function SearchControl(props: Props) {
             type="date"
             size="small"
             fullWidth={true}
-            defaultValue={props.getDatasReq.tanggalFrom}
+            defaultValue={props.getDatasReq.dateFrom}
             onChange={(event: ChangeEvent<HTMLInputElement>) => props.setGetDatasReq({
                 ...props.getDatasReq,
-                tanggalFrom: event.target.value
+                dateFrom: event.target.value
             })}
             sx={{
                 background: "white"
@@ -35,10 +35,10 @@ export default function SearchControl(props: Props) {
             type="date"
             size="small"
             fullWidth={true}
-            defaultValue={props.getDatasReq.tanggalUntil}
+            defaultValue={props.getDatasReq.dateUntil}
             onChange={(event: ChangeEvent<HTMLInputElement>) => props.setGetDatasReq({
                 ...props.getDatasReq,
-                tanggalUntil: event.target.value
+                dateUntil: event.target.value
             })}
             sx={{
                 background: "white"
@@ -54,10 +54,10 @@ export default function SearchControl(props: Props) {
             label="No Dokumen"
             size="small"
             fullWidth={true}
-            defaultValue={props.getDatasReq.noDokumen}
+            defaultValue={props.getDatasReq.documentNumber}
             onChange={(event: ChangeEvent<HTMLInputElement>) => props.setGetDatasReq({
                 ...props.getDatasReq,
-                noDokumen: event.target.value
+                documentNumber: event.target.value
             })}
             sx={{
                 background: "white"
@@ -70,10 +70,10 @@ export default function SearchControl(props: Props) {
             label="Keterangan"
             size="small"
             fullWidth={true}
-            defaultValue={props.getDatasReq.keterangan}
+            defaultValue={props.getDatasReq.description}
             onChange={(event: ChangeEvent<HTMLInputElement>) => props.setGetDatasReq({
                 ...props.getDatasReq,
-                keterangan: event.target.value
+                description: event.target.value
             })}
             sx={{
                 background: "white"

@@ -1,31 +1,36 @@
 import { DownloadFileUseCase, DownloadFileUseCaseImpl } from "./data/DownloadFileUseCase"
 import { GetDatasUseCase, GetDatasUseCaseImpl } from "./data/GetDatasUseCase"
 import { UploadDataUseCase, UploadDataUseCaseImpl } from "./data/UploadDataUseCase"
+import { ChangePasswordUseCase, ChangePasswordUseCaseImpl } from "./user/ChangePasswordUseCase"
 import { LoginUseCase, LoginUseCaseImpl } from "./user/LoginUseCase"
 import { SessionUseCase, SessionUseCaseImpl } from "./user/SessionUseCase"
 
 export interface UseCaseFactory {
-    createLoginUseCase(): LoginUseCase
-    createSessionUseCase(): SessionUseCase
-    createGetDatasUseCase(): GetDatasUseCase
-    createUploadDataUseCase(): UploadDataUseCase
-    createDownloadFileUseCase(): DownloadFileUseCase
+    useLoginUseCase(): LoginUseCase
+    useChangePasswordUseCase(): ChangePasswordUseCase
+    useSessionUseCase(): SessionUseCase
+    useGetDatasUseCase(): GetDatasUseCase
+    useUploadDataUseCase(): UploadDataUseCase
+    useDownloadFileUseCase(): DownloadFileUseCase
 }
 
 export class UseCaseFactoryImpl implements UseCaseFactory {
-    createLoginUseCase(): LoginUseCase {
+    useLoginUseCase(): LoginUseCase {
         return new LoginUseCaseImpl()
     }
-    createSessionUseCase(): SessionUseCase {
+    useChangePasswordUseCase(): ChangePasswordUseCase {
+        return new ChangePasswordUseCaseImpl()
+    }
+    useSessionUseCase(): SessionUseCase {
         return new SessionUseCaseImpl()
     }
-    createGetDatasUseCase(): GetDatasUseCase {
+    useGetDatasUseCase(): GetDatasUseCase {
         return new GetDatasUseCaseImpl()
     }
-    createUploadDataUseCase(): UploadDataUseCase {
+    useUploadDataUseCase(): UploadDataUseCase {
         return new UploadDataUseCaseImpl()
     }
-    createDownloadFileUseCase(): DownloadFileUseCase {
+    useDownloadFileUseCase(): DownloadFileUseCase {
         return new DownloadFileUseCaseImpl()
     }
 }

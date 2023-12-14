@@ -1,6 +1,7 @@
 import { DownloadFileUseCase, DownloadFileUseCaseImpl } from "./data/DownloadFileUseCase"
 import { GetDatasUseCase, GetDatasUseCaseImpl } from "./data/GetDatasUseCase"
 import { UploadDataUseCase, UploadDataUseCaseImpl } from "./data/UploadDataUseCase"
+import { CreateLockerUseCase, CreateLockerUseCaseImpl } from "./locker/CreateLockerUseCase"
 import { GetLockersUseCase, GetLockersUseCaseImpl } from "./locker/GetLockersUseCase"
 import { ChangePasswordUseCase, ChangePasswordUseCaseImpl } from "./user/ChangePasswordUseCase"
 import { LoginUseCase, LoginUseCaseImpl } from "./user/LoginUseCase"
@@ -17,6 +18,7 @@ export interface UseCaseFactory {
     useDownloadFileUseCase(): DownloadFileUseCase
     // Locker
     useGetLockersUseCase(): GetLockersUseCase
+    useCreateLockerUseCase(): CreateLockerUseCase
 }
 
 export class UseCaseFactoryImpl implements UseCaseFactory {
@@ -43,5 +45,8 @@ export class UseCaseFactoryImpl implements UseCaseFactory {
     // Locker
     useGetLockersUseCase(): GetLockersUseCase {
         return new GetLockersUseCaseImpl()
+    }
+    useCreateLockerUseCase(): CreateLockerUseCase {
+        return new CreateLockerUseCaseImpl()
     }
 }

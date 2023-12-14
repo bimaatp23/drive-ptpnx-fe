@@ -10,8 +10,6 @@ interface Props {
     datas: Data[]
 }
 
-
-
 export default function DataTable(props: Props) {
     const useCaseFactory: UseCaseFactory = useMemo(() => new UseCaseFactoryImpl(), [])
 

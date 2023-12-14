@@ -27,14 +27,14 @@ export default function Login() {
             })
     }
 
-    const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const handleOnChange = (e: ChangeEvent<HTMLInputElement>): void => {
         setLoginReq({
             ...loginReq,
             [e.target.id]: e.target.value
         })
     }
 
-    const handleOnEnter = (e: KeyboardEvent<HTMLDivElement>) => {
+    const handleOnEnter = (e: KeyboardEvent<HTMLDivElement>): void => {
         if (e.key === "Enter") {
             doLogin()
         }

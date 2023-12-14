@@ -5,10 +5,11 @@ import Topbar from "./Topbar"
 
 interface Props {
     title: string
+    headElement?: ReactNode
     children?: ReactNode
 }
 
-const MainPage: FC<Props> = ({ title, children }) => {
+const MainPage: FC<Props> = ({ title, headElement, children }) => {
     const [sidebarOpen, setSidebarOpen] = useState<boolean>(false)
 
     return <Stack>
@@ -30,11 +31,26 @@ const MainPage: FC<Props> = ({ title, children }) => {
                 transform: "translateX(-50%)"
             }}
         >
-            <Typography
-                fontSize={40}
+            <Stack
+                display="flex"
+                flexDirection="row"
+                columnGap={2}
+                alignItems="center"
+                justifyContent="space-between"
             >
-                {title.charAt(0).toUpperCase() + title.slice(1)}
-            </Typography>
+                <Typography
+                    fontSize={40}
+                >
+                    {title.charAt(0).toUpperCase() + title.slice(1)}
+                </Typography>
+                <Stack
+                    display="flex"
+                    flexDirection="row"
+                    columnGap={2}
+                >
+                    {headElement}
+                </Stack>
+            </Stack>
             {children}
         </Stack>
     </Stack>

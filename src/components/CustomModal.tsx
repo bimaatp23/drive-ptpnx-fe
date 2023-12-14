@@ -1,10 +1,11 @@
-import { Box, Modal } from "@mui/material"
+import { Box, Modal, Stack, Typography } from "@mui/material"
 import { ReactNode } from "react"
 
 interface Props {
+    title: string
     open: boolean
     onClose(): void
-    children: ReactNode
+    children?: ReactNode
 }
 
 const style = {
@@ -14,9 +15,8 @@ const style = {
     transform: "translate(-50%, -50%)",
     width: 400,
     bgcolor: "background.paper",
-    border: "2px solid #000",
-    boxShadow: 24,
-    p: 4
+    borderRadius: "10px",
+    p: 2
 }
 
 export default function CustomModal(props: Props) {
@@ -25,7 +25,19 @@ export default function CustomModal(props: Props) {
         onClose={props.onClose}
     >
         <Box sx={style}>
-            {props.children}
+            <Stack
+                display="flex"
+                rowGap={2}
+                alignItems="center"
+            >
+                <Typography
+                    fontSize={20}
+                    fontWeight="bold"
+                >
+                    {props.title}
+                </Typography>
+                {props.children}
+            </Stack>
         </Box>
     </Modal>
 }

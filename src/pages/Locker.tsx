@@ -1,7 +1,11 @@
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material"
-import { useEffect, useMemo, useState } from "react"
+import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material"
+import { ChangeEvent, KeyboardEvent, useEffect, useMemo, useState } from "react"
+import { finalize } from "rxjs"
 import { setNotification } from "../Util"
+import CustomModal from "../components/CustomModal"
 import MainPage from "../components/MainPage"
+import { BaseResp } from "../types/BaseResp"
+import { CreateLockerReq } from "../types/locker/CreateLockerReq"
 import { GetLockersResp } from "../types/locker/GetLockersResp"
 import { Locker as LockerType } from "../types/locker/Locker"
 import { UseCaseFactory, UseCaseFactoryImpl } from "../usecase/UseCaseFactory"
@@ -9,6 +13,11 @@ import { UseCaseFactory, UseCaseFactoryImpl } from "../usecase/UseCaseFactory"
 export default function Locker() {
     const useCaseFactory: UseCaseFactory = useMemo(() => new UseCaseFactoryImpl(), [])
     const [lockers, setLockers] = useState<LockerType[]>([])
+    const [createLockerReq, setCreateLockerReq] = useState<CreateLockerReq>({
+        name: "",
+        capacity: 0
+    })
+    const [isModalCreateOpen, setIsModalCreateOpen] = useState<boolean>(false)
 
     const [isStatic, setIsStatic] = useState<boolean>(false)
     useEffect(() => setIsStatic(true), [])
@@ -32,9 +41,112 @@ export default function Locker() {
         }
     }, [isStatic, useCaseFactory])
 
+    const getLockerList = (): void => {
+        useCaseFactory.useGetLockersUseCase().execute()
+            .subscribe({
+                next: (response: GetLockersResp) => {
+                    if (response.errorSchema.errorCode === 200) {
+                        setLockers(response.outputSchema)
+                    }
+                },
+                error: (error) => {
+                    setNotification({
+                        icon: "error",
+                        message: error.response.data.errorSchema?.errorMessage ?? error.response.statusText
+                    })
+                }
+            })
+    }
+
+    const displayCreateModal = () => {
+        return <CustomModal
+            title="Tambah Loker"
+            open={isModalCreateOpen}
+            onClose={() => setIsModalCreateOpen(false)}
+        >
+            <TextField
+                size="small"
+                id="name"
+                label="Nama"
+                fullWidth
+                value={createLockerReq.name}
+                onChange={handleCreateOnChange}
+                onKeyDown={handleCreateOnEnter}
+            />
+            <TextField
+                type="number"
+                size="small"
+                id="capacity"
+                label="Kapasitas"
+                fullWidth
+                value={createLockerReq.capacity}
+                onChange={handleCreateOnChange}
+                onKeyDown={handleCreateOnEnter}
+            />
+            <Button
+                variant="contained"
+                onClick={doCreateLocker}
+            >
+                Tambah
+            </Button>
+        </CustomModal>
+    }
+
+    const handleCreateOnChange = (e: ChangeEvent<HTMLInputElement>): void => {
+        setCreateLockerReq({
+            ...createLockerReq,
+            [e.target.id]: e.target.value
+        })
+    }
+
+    const handleCreateOnEnter = (e: KeyboardEvent<HTMLDivElement>): void => {
+        if (e.key === "Enter") {
+            doCreateLocker()
+        }
+    }
+
+    const doCreateLocker = (): void => {
+        useCaseFactory.useCreateLockerUseCase().execute(createLockerReq)
+            .pipe(
+                finalize(() => {
+                    setIsModalCreateOpen(false)
+                    getLockerList()
+                })
+            )
+            .subscribe({
+                next: (response: BaseResp) => {
+                    if (response.errorSchema.errorCode === 200) {
+                        setNotification({
+                            icon: "success",
+                            message: response.errorSchema.errorMessage
+                        })
+                        setCreateLockerReq({
+                            name: "",
+                            capacity: 0
+                        })
+                    }
+                },
+                error: (error) => {
+                    setNotification({
+                        icon: "error",
+                        message: error.response.data.errorSchema?.errorMessage ?? error.response.statusText
+                    })
+                }
+            })
+    }
+
     return <MainPage
         title="Loker"
+        headElement={
+            <Button
+                variant="contained"
+                onClick={() => setIsModalCreateOpen(true)}
+            >
+                Tambah Loker
+            </Button>
+        }
     >
+        {displayCreateModal()}
         <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>

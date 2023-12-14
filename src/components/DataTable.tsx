@@ -17,6 +17,7 @@ export default function DataTable(props: Props) {
 
     const displayEditModal = () => {
         return <CustomModal
+            title="Edit"
             open={isEditModalOpen}
             onClose={() => setIsModalEditOpen(false)}
         >

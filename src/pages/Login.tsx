@@ -1,5 +1,5 @@
 import { Button, Stack, TextField } from "@mui/material"
-import { ChangeEvent, useState } from "react"
+import { ChangeEvent, KeyboardEvent, useState } from "react"
 import { setNotification } from "../Util"
 import { LoginReq } from "../types/user/LoginReq"
 import { LoginResp } from "../types/user/LoginResp"
@@ -13,7 +13,7 @@ export default function Login() {
     })
 
     const doLogin = (): void => {
-        useCaseFactory.createLoginUseCase().execute(loginReq)
+        useCaseFactory.useLoginUseCase().execute(loginReq)
             .subscribe({
                 next: (response: LoginResp) => {
                     window.location.assign("/")
@@ -25,6 +25,19 @@ export default function Login() {
                     })
                 }
             })
+    }
+
+    const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setLoginReq({
+            ...loginReq,
+            [e.target.id]: e.target.value
+        })
+    }
+
+    const handleOnEnter = (e: KeyboardEvent<HTMLDivElement>) => {
+        if (e.key === "Enter") {
+            doLogin()
+        }
     }
 
     return <Stack
@@ -43,13 +56,10 @@ export default function Login() {
             variant="outlined"
             size="small"
             label="Username"
+            id="username"
             value={loginReq.username}
-            onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                setLoginReq({
-                    ...loginReq,
-                    username: event.target.value
-                })
-            }}
+            onChange={handleOnChange}
+            onKeyDown={handleOnEnter}
             sx={{
                 mb: 2
             }}
@@ -58,14 +68,11 @@ export default function Login() {
             variant="outlined"
             size="small"
             label="Password"
+            id="password"
             type="password"
             value={loginReq.password}
-            onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                setLoginReq({
-                    ...loginReq,
-                    password: event.target.value
-                })
-            }}
+            onChange={handleOnChange}
+            onKeyDown={handleOnEnter}
             sx={{
                 mb: 2
             }}
@@ -73,7 +80,7 @@ export default function Login() {
         <Button
             variant="contained"
             color="primary"
-            onClick={() => doLogin()}
+            onClick={doLogin}
         >
             Login
         </Button>

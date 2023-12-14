@@ -33,7 +33,7 @@ export default function DataTable(props: Props) {
 
     const handleDownload = (data: Data): void => {
         const { id, file, documentNumber } = data
-        useCaseFactory.createDownloadFileUseCase().execute(id)
+        useCaseFactory.useDownloadFileUseCase().execute(id)
             .subscribe({
                 next: (response: string) => {
                     console.log(response)

@@ -63,7 +63,7 @@ export default function Upload() {
     }
 
     const handleUpload = (): void => {
-        useCaseFactory.createUploadDataUseCase().execute(uploadDataReq)
+        useCaseFactory.useUploadDataUseCase().execute(uploadDataReq)
             .subscribe({
                 next: (response: BaseResp) => {
                     setNotification({

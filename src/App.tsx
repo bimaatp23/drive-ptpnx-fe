@@ -1,8 +1,8 @@
 import { Stack } from "@mui/material"
 import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom"
+import ChangePassword from "./pages/ChangePassword"
 import Dashboard from "./pages/Dashboard"
 import DataPage from "./pages/DataPage"
-import GantiPassword from "./pages/GantiPassword"
 import Login from "./pages/Login"
 import Upload from "./pages/Upload"
 import { UseCaseFactory, UseCaseFactoryImpl } from "./usecase/UseCaseFactory"
@@ -11,7 +11,7 @@ export default function App() {
   const useCaseFactory: UseCaseFactory = new UseCaseFactoryImpl()
 
   const isLogin = (): boolean => {
-    return useCaseFactory.createSessionUseCase().get().name !== null
+    return useCaseFactory.useSessionUseCase().get().name !== null
   }
 
   const middlewareIsLogin = (path: string, element: JSX.Element): {
@@ -42,7 +42,7 @@ export default function App() {
     middlewareIsLogin("/", <Dashboard />),
     middlewareIsLogin("/upload", <Upload />),
     middlewareIsLogin("/:category", <DataPage />),
-    middlewareIsLogin("/ganti-password", <GantiPassword />),
+    middlewareIsLogin("/ganti-password", <ChangePassword />),
     middlewareIsNotLogin("/login", <Login />)
   ])
 

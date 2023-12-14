@@ -12,7 +12,7 @@ export default function Topbar(props: Props) {
     const [modalOpen, setModalOpen] = useState<boolean>(false)
 
     const doLogout = (): void => {
-        useCaseFactory.createSessionUseCase().clear()
+        useCaseFactory.useSessionUseCase().clear()
         window.location.assign("/login")
     }
 

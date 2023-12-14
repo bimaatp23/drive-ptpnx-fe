@@ -40,7 +40,7 @@ export default function DataPage() {
                 description: "",
                 documentNumber: ""
             }
-            useCaseFactory.createGetDatasUseCase().execute(firstGetDatasReq)
+            useCaseFactory.useGetDatasUseCase().execute(firstGetDatasReq)
                 .subscribe({
                     next: (response: GetDatasResp) => {
                         if (response.errorSchema.errorCode === 200) {
@@ -58,7 +58,7 @@ export default function DataPage() {
     }, [isStatic, useCaseFactory, category, currentDate, aYearAgo])
 
     const loadData = (): void => {
-        useCaseFactory.createGetDatasUseCase().execute(getDatasReq)
+        useCaseFactory.useGetDatasUseCase().execute(getDatasReq)
             .subscribe({
                 next: (response: GetDatasResp) => {
                     if (response.errorSchema.errorCode === 200) {

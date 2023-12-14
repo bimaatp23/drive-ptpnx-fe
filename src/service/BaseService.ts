@@ -4,6 +4,7 @@ import { UseCaseFactory, UseCaseFactoryImpl } from "../usecase/UseCaseFactory"
 export interface BaseService {
     httpGet(url: string, config?: AxiosRequestConfig<any>): Promise<AxiosResponse<any, any>>
     httpPost(url: string, data?: any, config?: AxiosRequestConfig<any>): Promise<AxiosResponse<any, any>>
+    httpPostBasic(url: string, data?: any, config?: AxiosRequestConfig<any>): Promise<AxiosResponse<any, any>>
 }
 
 export class BaseServiceImpl implements BaseService {
@@ -15,7 +16,7 @@ export class BaseServiceImpl implements BaseService {
         const defaultConfig: AxiosRequestConfig<any> = {
             ...config,
             headers: {
-                Authorization: "Bearer " + this.useCaseFactory.createSessionUseCase().getToken()
+                Authorization: "Bearer " + this.useCaseFactory.useSessionUseCase().getToken()
             }
         }
         return axios.get(this.endPoint + url, defaultConfig)
@@ -25,7 +26,17 @@ export class BaseServiceImpl implements BaseService {
         const defaultConfig: AxiosRequestConfig<any> = {
             ...config,
             headers: {
-                Authorization: "Bearer " + this.useCaseFactory.createSessionUseCase().getToken(),
+                Authorization: "Bearer " + this.useCaseFactory.useSessionUseCase().getToken(),
+                "Content-Type": "multipart/form-data"
+            }
+        }
+        return axios.post(this.endPoint + url, data, defaultConfig)
+    }
+
+    httpPostBasic(url: string, data?: any, config?: AxiosRequestConfig<any> | undefined): Promise<AxiosResponse<any, any>> {
+        const defaultConfig: AxiosRequestConfig<any> = {
+            ...config,
+            headers: {
                 "Content-Type": "multipart/form-data"
             }
         }

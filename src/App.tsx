@@ -2,7 +2,8 @@ import { Stack } from "@mui/material"
 import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom"
 import ChangePassword from "./pages/ChangePassword"
 import Dashboard from "./pages/Dashboard"
-import DataPage from "./pages/DataPage"
+import Data from "./pages/Data"
+import Locker from "./pages/Locker"
 import Login from "./pages/Login"
 import Upload from "./pages/Upload"
 import { UseCaseFactory, UseCaseFactoryImpl } from "./usecase/UseCaseFactory"
@@ -41,8 +42,9 @@ export default function App() {
   const router = createBrowserRouter([
     middlewareIsLogin("/", <Dashboard />),
     middlewareIsLogin("/upload", <Upload />),
-    middlewareIsLogin("/:category", <DataPage />),
-    middlewareIsLogin("/ganti-password", <ChangePassword />),
+    middlewareIsLogin("/:category", <Data />),
+    middlewareIsLogin("/locker", <Locker />),
+    middlewareIsLogin("/change-password", <ChangePassword />),
     middlewareIsNotLogin("/login", <Login />)
   ])
 

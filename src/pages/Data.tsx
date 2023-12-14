@@ -5,12 +5,12 @@ import { setNotification } from "../Util"
 import DataTable from "../components/DataTable"
 import MainPage from "../components/MainPage"
 import SearchControl from "../components/SearchControl"
-import { Data } from "../types/data/Data"
+import { Data as DataType } from "../types/data/Data"
 import { GetDatasReq } from "../types/data/GetDatasReq"
 import { GetDatasResp } from "../types/data/GetDatasResp"
 import { UseCaseFactory, UseCaseFactoryImpl } from "../usecase/UseCaseFactory"
 
-export default function DataPage() {
+export default function Data() {
     const { category } = useParams()
     const useCaseFactory: UseCaseFactory = useMemo(() => new UseCaseFactoryImpl(), [])
     const currentDate: Date = useMemo(() => new Date(), [])
@@ -19,7 +19,7 @@ export default function DataPage() {
         result.setFullYear(currentDate.getFullYear() - 1)
         return result
     }, [currentDate])
-    const [datas, setDatas] = useState<Data[]>([])
+    const [datas, setDatas] = useState<DataType[]>([])
     const [getDatasReq, setGetDatasReq] = useState<GetDatasReq>({
         category: category as string,
         dateFrom: moment(aYearAgo).format("YYYY-MM-DD"),

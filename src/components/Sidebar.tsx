@@ -86,6 +86,10 @@ export default function Sidebar(props: Props) {
                     path: "/umum",
                     label: "Umum"
                 },
+                {
+                    path: "/locker",
+                    label: "Loker"
+                }
             ])}
         </Stack>
     </Drawer>

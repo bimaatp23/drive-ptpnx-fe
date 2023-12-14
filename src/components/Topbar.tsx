@@ -77,7 +77,7 @@ export default function Topbar(props: Props) {
                             borderRadius: 0,
                             paddingY: 2
                         }}
-                        onClick={() => window.location.assign("/ganti-password")}
+                        onClick={() => window.location.assign("/change-password")}
                     >
                         <Typography
                             width="100%"

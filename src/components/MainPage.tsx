@@ -5,7 +5,7 @@ import Topbar from "./Topbar"
 
 interface Props {
     title: string
-    children: ReactNode
+    children?: ReactNode
 }
 
 const MainPage: FC<Props> = ({ title, children }) => {

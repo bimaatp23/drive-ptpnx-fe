@@ -8,6 +8,7 @@ import { BaseResp } from "../types/BaseResp"
 import { CreateLockerReq } from "../types/locker/CreateLockerReq"
 import { GetLockersResp } from "../types/locker/GetLockersResp"
 import { Locker as LockerType } from "../types/locker/Locker"
+import { UpdateLockerReq } from "../types/locker/UpdateLockerReq"
 import { UseCaseFactory, UseCaseFactoryImpl } from "../usecase/UseCaseFactory"
 
 export default function Locker() {
@@ -17,7 +18,13 @@ export default function Locker() {
         name: "",
         capacity: 0
     })
+    const [updateLockerReq, setUpdateLockerReq] = useState<UpdateLockerReq>({
+        id: "",
+        name: "",
+        capacity: 0
+    })
     const [isModalCreateOpen, setIsModalCreateOpen] = useState<boolean>(false)
+    const [isModalUpdateOpen, setIsModalUpdateOpen] = useState<boolean>(false)
 
     const [isStatic, setIsStatic] = useState<boolean>(false)
     useEffect(() => setIsStatic(true), [])
@@ -92,6 +99,40 @@ export default function Locker() {
         </CustomModal>
     }
 
+    const displayUpdateModal = () => {
+        return <CustomModal
+            title="Edit Loker"
+            open={isModalUpdateOpen}
+            onClose={() => setIsModalUpdateOpen(false)}
+        >
+            <TextField
+                size="small"
+                id="name"
+                label="Nama"
+                fullWidth
+                value={updateLockerReq.name}
+                onChange={handleUpdateOnChange}
+                onKeyDown={handleUpdateOnEnter}
+            />
+            <TextField
+                type="number"
+                size="small"
+                id="capacity"
+                label="Kapasitas"
+                fullWidth
+                value={updateLockerReq.capacity}
+                onChange={handleUpdateOnChange}
+                onKeyDown={handleUpdateOnEnter}
+            />
+            <Button
+                variant="contained"
+                onClick={doUpdateLocker}
+            >
+                Simpan
+            </Button>
+        </CustomModal>
+    }
+
     const handleCreateOnChange = (e: ChangeEvent<HTMLInputElement>): void => {
         setCreateLockerReq({
             ...createLockerReq,
@@ -105,11 +146,54 @@ export default function Locker() {
         }
     }
 
+    const handleUpdateOnChange = (e: ChangeEvent<HTMLInputElement>): void => {
+        setUpdateLockerReq({
+            ...updateLockerReq,
+            [e.target.id]: e.target.value
+        })
+    }
+
+    const handleUpdateOnEnter = (e: KeyboardEvent<HTMLDivElement>): void => {
+        if (e.key === "Enter") {
+            doUpdateLocker()
+        }
+    }
+
     const doCreateLocker = (): void => {
         useCaseFactory.useCreateLockerUseCase().execute(createLockerReq)
             .pipe(
                 finalize(() => {
                     setIsModalCreateOpen(false)
+                    getLockerList()
+                })
+            )
+            .subscribe({
+                next: (response: BaseResp) => {
+                    if (response.errorSchema.errorCode === 200) {
+                        setNotification({
+                            icon: "success",
+                            message: response.errorSchema.errorMessage
+                        })
+                        setCreateLockerReq({
+                            name: "",
+                            capacity: 0
+                        })
+                    }
+                },
+                error: (error) => {
+                    setNotification({
+                        icon: "error",
+                        message: error.response.data.errorSchema?.errorMessage ?? error.response.statusText
+                    })
+                }
+            })
+    }
+
+    const doUpdateLocker = (): void => {
+        useCaseFactory.useUpdateLockerUseCase().execute(updateLockerReq)
+            .pipe(
+                finalize(() => {
+                    setIsModalUpdateOpen(false)
                     getLockerList()
                 })
             )
@@ -147,6 +231,7 @@ export default function Locker() {
         }
     >
         {displayCreateModal()}
+        {displayUpdateModal()}
         <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
@@ -197,7 +282,23 @@ export default function Locker() {
                                 >
                                     {locker.capacity}
                                 </TableCell>
-                                <TableCell></TableCell>
+                                <TableCell
+                                    align="center"
+                                >
+                                    <Button
+                                        variant="contained"
+                                        onClick={() => {
+                                            setUpdateLockerReq({
+                                                id: locker.id,
+                                                name: locker.name,
+                                                capacity: locker.capacity
+                                            })
+                                            setIsModalUpdateOpen(true)
+                                        }}
+                                    >
+                                        Edit
+                                    </Button>
+                                </TableCell>
                             </TableRow>
                         )
                         :

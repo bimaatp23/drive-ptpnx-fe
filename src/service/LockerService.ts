@@ -2,6 +2,7 @@ import { Observable, from, map } from "rxjs"
 import { BaseResp } from "../types/BaseResp"
 import { CreateLockerReq } from "../types/locker/CreateLockerReq"
 import { GetLockersResp } from "../types/locker/GetLockersResp"
+import { UpdateLockerReq } from "../types/locker/UpdateLockerReq"
 import { BaseService, BaseServiceImpl } from "./BaseService"
 
 export class LockerService {
@@ -17,6 +18,13 @@ export class LockerService {
 
     create(createLockerReq: CreateLockerReq): Observable<BaseResp> {
         return from(this.baseService.httpPost(this.endPoint + "/create", createLockerReq))
+            .pipe(
+                map((response) => response.data as BaseResp)
+            )
+    }
+
+    update(updateLockerReq: UpdateLockerReq): Observable<BaseResp> {
+        return from(this.baseService.httpPost(this.endPoint + "/update", updateLockerReq))
             .pipe(
                 map((response) => response.data as BaseResp)
             )

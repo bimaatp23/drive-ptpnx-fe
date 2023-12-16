@@ -1,4 +1,4 @@
-import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material"
+import { Button, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material"
 import { ChangeEvent, KeyboardEvent, useEffect, useMemo, useState } from "react"
 import { finalize } from "rxjs"
 import { setNotification } from "../Util"
@@ -6,6 +6,7 @@ import CustomModal from "../components/CustomModal"
 import MainPage from "../components/MainPage"
 import { BaseResp } from "../types/BaseResp"
 import { CreateLockerReq } from "../types/locker/CreateLockerReq"
+import { DeleteLockerReq } from "../types/locker/DeleteLockerReq"
 import { GetLockersResp } from "../types/locker/GetLockersResp"
 import { Locker as LockerType } from "../types/locker/Locker"
 import { UpdateLockerReq } from "../types/locker/UpdateLockerReq"
@@ -23,8 +24,12 @@ export default function Locker() {
         name: "",
         capacity: 0
     })
+    const [deleteLockerReq, setDeleteLockerReq] = useState<DeleteLockerReq>({
+        id: ""
+    })
     const [isModalCreateOpen, setIsModalCreateOpen] = useState<boolean>(false)
     const [isModalUpdateOpen, setIsModalUpdateOpen] = useState<boolean>(false)
+    const [isModalDeleteOpen, setIsModalDeleteOpen] = useState<boolean>(false)
 
     const [isStatic, setIsStatic] = useState<boolean>(false)
     useEffect(() => setIsStatic(true), [])
@@ -54,6 +59,96 @@ export default function Locker() {
                 next: (response: GetLockersResp) => {
                     if (response.errorSchema.errorCode === 200) {
                         setLockers(response.outputSchema)
+                    }
+                },
+                error: (error) => {
+                    setNotification({
+                        icon: "error",
+                        message: error.response.data.errorSchema?.errorMessage ?? error.response.statusText
+                    })
+                }
+            })
+    }
+
+    const doCreateLocker = (): void => {
+        useCaseFactory.useCreateLockerUseCase().execute(createLockerReq)
+            .pipe(
+                finalize(() => {
+                    setIsModalCreateOpen(false)
+                    getLockerList()
+                })
+            )
+            .subscribe({
+                next: (response: BaseResp) => {
+                    if (response.errorSchema.errorCode === 200) {
+                        setNotification({
+                            icon: "success",
+                            message: response.errorSchema.errorMessage
+                        })
+                        setCreateLockerReq({
+                            name: "",
+                            capacity: 0
+                        })
+                    }
+                },
+                error: (error) => {
+                    setNotification({
+                        icon: "error",
+                        message: error.response.data.errorSchema?.errorMessage ?? error.response.statusText
+                    })
+                }
+            })
+    }
+
+    const doUpdateLocker = (): void => {
+        useCaseFactory.useUpdateLockerUseCase().execute(updateLockerReq)
+            .pipe(
+                finalize(() => {
+                    setIsModalUpdateOpen(false)
+                    getLockerList()
+                })
+            )
+            .subscribe({
+                next: (response: BaseResp) => {
+                    if (response.errorSchema.errorCode === 200) {
+                        setNotification({
+                            icon: "success",
+                            message: response.errorSchema.errorMessage
+                        })
+                        setCreateLockerReq({
+                            name: "",
+                            capacity: 0
+                        })
+                    }
+                },
+                error: (error) => {
+                    setNotification({
+                        icon: "error",
+                        message: error.response.data.errorSchema?.errorMessage ?? error.response.statusText
+                    })
+                }
+            })
+    }
+
+    const doDeleteLocker = (): void => {
+        useCaseFactory.useDeleteLockerUseCase().execute(deleteLockerReq)
+            .pipe(
+                finalize(() => {
+                    setIsModalDeleteOpen(false)
+                    getLockerList()
+                })
+            )
+            .subscribe({
+                next: (response: BaseResp) => {
+                    if (response.errorSchema.errorCode === 200) {
+                        setNotification({
+                            icon: "success",
+                            message: response.errorSchema.errorMessage
+                        })
+                        setCreateLockerReq({
+                            name: "",
+                            capacity: 0
+                        })
                     }
                 },
                 error: (error) => {
@@ -133,9 +228,37 @@ export default function Locker() {
         </CustomModal>
     }
 
+    const displayDeleteModal = () => {
+        return <CustomModal
+            title="Hapus Loker"
+            open={isModalDeleteOpen}
+            onClose={() => setIsModalDeleteOpen(false)}
+        >
+            <Typography
+                fontWeight="bold"
+            >
+                Yakin hapus loker ini ?
+            </Typography>
+            <Button
+                variant="contained"
+                color="error"
+                onClick={doDeleteLocker}
+            >
+                Hapus
+            </Button>
+        </CustomModal>
+    }
+
     const handleCreateOnChange = (e: ChangeEvent<HTMLInputElement>): void => {
         setCreateLockerReq({
             ...createLockerReq,
+            [e.target.id]: e.target.value
+        })
+    }
+
+    const handleUpdateOnChange = (e: ChangeEvent<HTMLInputElement>): void => {
+        setUpdateLockerReq({
+            ...updateLockerReq,
             [e.target.id]: e.target.value
         })
     }
@@ -146,77 +269,10 @@ export default function Locker() {
         }
     }
 
-    const handleUpdateOnChange = (e: ChangeEvent<HTMLInputElement>): void => {
-        setUpdateLockerReq({
-            ...updateLockerReq,
-            [e.target.id]: e.target.value
-        })
-    }
-
     const handleUpdateOnEnter = (e: KeyboardEvent<HTMLDivElement>): void => {
         if (e.key === "Enter") {
             doUpdateLocker()
         }
-    }
-
-    const doCreateLocker = (): void => {
-        useCaseFactory.useCreateLockerUseCase().execute(createLockerReq)
-            .pipe(
-                finalize(() => {
-                    setIsModalCreateOpen(false)
-                    getLockerList()
-                })
-            )
-            .subscribe({
-                next: (response: BaseResp) => {
-                    if (response.errorSchema.errorCode === 200) {
-                        setNotification({
-                            icon: "success",
-                            message: response.errorSchema.errorMessage
-                        })
-                        setCreateLockerReq({
-                            name: "",
-                            capacity: 0
-                        })
-                    }
-                },
-                error: (error) => {
-                    setNotification({
-                        icon: "error",
-                        message: error.response.data.errorSchema?.errorMessage ?? error.response.statusText
-                    })
-                }
-            })
-    }
-
-    const doUpdateLocker = (): void => {
-        useCaseFactory.useUpdateLockerUseCase().execute(updateLockerReq)
-            .pipe(
-                finalize(() => {
-                    setIsModalUpdateOpen(false)
-                    getLockerList()
-                })
-            )
-            .subscribe({
-                next: (response: BaseResp) => {
-                    if (response.errorSchema.errorCode === 200) {
-                        setNotification({
-                            icon: "success",
-                            message: response.errorSchema.errorMessage
-                        })
-                        setCreateLockerReq({
-                            name: "",
-                            capacity: 0
-                        })
-                    }
-                },
-                error: (error) => {
-                    setNotification({
-                        icon: "error",
-                        message: error.response.data.errorSchema?.errorMessage ?? error.response.statusText
-                    })
-                }
-            })
     }
 
     return <MainPage
@@ -232,6 +288,7 @@ export default function Locker() {
     >
         {displayCreateModal()}
         {displayUpdateModal()}
+        {displayDeleteModal()}
         <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
@@ -285,19 +342,39 @@ export default function Locker() {
                                 <TableCell
                                     align="center"
                                 >
-                                    <Button
-                                        variant="contained"
-                                        onClick={() => {
-                                            setUpdateLockerReq({
-                                                id: locker.id,
-                                                name: locker.name,
-                                                capacity: locker.capacity
-                                            })
-                                            setIsModalUpdateOpen(true)
-                                        }}
+                                    <Stack
+                                        width="100%"
+                                        display="flex"
+                                        flexDirection="row"
+                                        columnGap={2}
+                                        justifyContent="center"
                                     >
-                                        Edit
-                                    </Button>
+                                        <Button
+                                            variant="contained"
+                                            onClick={() => {
+                                                setUpdateLockerReq({
+                                                    id: locker.id,
+                                                    name: locker.name,
+                                                    capacity: locker.capacity
+                                                })
+                                                setIsModalUpdateOpen(true)
+                                            }}
+                                        >
+                                            Edit
+                                        </Button>
+                                        <Button
+                                            variant="contained"
+                                            color="error"
+                                            onClick={() => {
+                                                setDeleteLockerReq({
+                                                    id: locker.id
+                                                })
+                                                setIsModalDeleteOpen(true)
+                                            }}
+                                        >
+                                            Hapus
+                                        </Button>
+                                    </Stack>
                                 </TableCell>
                             </TableRow>
                         )

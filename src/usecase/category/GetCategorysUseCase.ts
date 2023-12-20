@@ -1,10 +1,10 @@
 import { Observable } from "rxjs"
 import { CategoryService } from "../../service/CategoryService"
-import { GetCatgeorysResp } from "../../types/category/GetCategorysResp"
+import { GetCategorysResp } from "../../types/category/GetCategorysResp"
 import { GetLockersResp } from "../../types/locker/GetLockersResp"
 
 export interface GetCategorysUseCase {
-    execute(): Observable<GetCatgeorysResp>
+    execute(): Observable<GetCategorysResp>
 }
 
 export class GetCategorysUseCaseImpl implements GetCategorysUseCase {

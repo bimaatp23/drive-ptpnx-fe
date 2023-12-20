@@ -1,3 +1,4 @@
+import { CreateCategoryUseCase, CreateCategoryUseCaseImpl } from "./category/CreateCategoryUseCase"
 import { GetCategorysUseCase, GetCategorysUseCaseImpl } from "./category/GetCategorysUseCase"
 import { DownloadFileUseCase, DownloadFileUseCaseImpl } from "./data/DownloadFileUseCase"
 import { GetDatasUseCase, GetDatasUseCaseImpl } from "./data/GetDatasUseCase"
@@ -26,6 +27,7 @@ export interface UseCaseFactory {
     useDeleteLockerUseCase(): DeleteLockerUseCase
     // Category
     useGetCategorysUseCase(): GetCategorysUseCase
+    useCreateCategoryUseCase(): CreateCategoryUseCase
 }
 
 export class UseCaseFactoryImpl implements UseCaseFactory {
@@ -64,5 +66,8 @@ export class UseCaseFactoryImpl implements UseCaseFactory {
     }
     useGetCategorysUseCase(): GetCategorysUseCase {
         return new GetCategorysUseCaseImpl()
+    }
+    useCreateCategoryUseCase(): CreateCategoryUseCase {
+        return new CreateCategoryUseCaseImpl()
     }
 }

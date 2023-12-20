@@ -10,7 +10,7 @@ export class LockerService {
     readonly endPoint: string = "/locker"
     baseService: BaseService = new BaseServiceImpl()
 
-    getLocker(): Observable<GetLockersResp> {
+    getLockers(): Observable<GetLockersResp> {
         return from(this.baseService.httpGet(this.endPoint))
             .pipe(
                 map((response) => response.data as GetLockersResp)
@@ -31,7 +31,7 @@ export class LockerService {
             )
     }
 
-    delete(deleteLockerReq: DeleteLockerReq): Observable<BaseResp> {
+    remove(deleteLockerReq: DeleteLockerReq): Observable<BaseResp> {
         return from(this.baseService.httpPost(this.endPoint + "/delete", deleteLockerReq))
             .pipe(
                 map((response) => response.data as BaseResp)

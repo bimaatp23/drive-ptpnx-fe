@@ -9,7 +9,7 @@ export interface DeleteLockerUseCase {
 
 export class DeleteLockerUseCaseImpl implements DeleteLockerUseCase {
     execute(deleteLockerReq: DeleteLockerReq): Observable<BaseResp> {
-        return new LockerService().delete(deleteLockerReq)
+        return new LockerService().remove(deleteLockerReq)
     }
 
 }

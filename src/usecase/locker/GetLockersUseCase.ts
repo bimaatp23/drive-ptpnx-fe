@@ -8,6 +8,6 @@ export interface GetLockersUseCase {
 
 export class GetLockersUseCaseImpl implements GetLockersUseCase {
     execute(): Observable<GetLockersResp> {
-        return new LockerService().getLocker()
+        return new LockerService().getLockers()
     }
 }

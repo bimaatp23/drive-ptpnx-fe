@@ -115,10 +115,6 @@ export default function Locker() {
                             icon: "success",
                             message: response.errorSchema.errorMessage
                         })
-                        setCreateLockerReq({
-                            name: "",
-                            capacity: 0
-                        })
                     }
                 },
                 error: (error) => {
@@ -144,10 +140,6 @@ export default function Locker() {
                         setNotification({
                             icon: "success",
                             message: response.errorSchema.errorMessage
-                        })
-                        setCreateLockerReq({
-                            name: "",
-                            capacity: 0
                         })
                     }
                 },

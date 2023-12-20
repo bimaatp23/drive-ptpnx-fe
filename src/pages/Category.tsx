@@ -1,4 +1,4 @@
-import { Button, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material"
+import { Button, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material"
 import { ChangeEvent, KeyboardEvent, useEffect, useMemo, useState } from "react"
 import { finalize } from "rxjs"
 import { setNotification } from "../Util"
@@ -7,6 +7,7 @@ import MainPage from "../components/MainPage"
 import { BaseResp } from "../types/BaseResp"
 import { Category as CategoryType } from "../types/category/Category"
 import { CreateCategoryReq } from "../types/category/CreateCategoryReq"
+import { DeleteCategoryReq } from "../types/category/DeleteCategoryReq"
 import { GetCategorysResp } from "../types/category/GetCategorysResp"
 import { UpdateCategoryReq } from "../types/category/UpdateCategoryReq"
 import { UseCaseFactory, UseCaseFactoryImpl } from "../usecase/UseCaseFactory"
@@ -21,8 +22,12 @@ export default function Category() {
         id: "",
         name: ""
     })
+    const [deleteCategoryReq, setDeleteCategoryReq] = useState<DeleteCategoryReq>({
+        id: ""
+    })
     const [isModalCreateOpen, setIsModalCreateOpen] = useState<boolean>(false)
     const [isModalUpdateOpen, setIsModalUpdateOpen] = useState<boolean>(false)
+    const [isModalDeleteOpen, setIsModalDeleteOpen] = useState<boolean>(false)
 
     const [isStatic, setIsStatic] = useState<boolean>(false)
     useEffect(() => setIsStatic(true), [])
@@ -107,8 +112,31 @@ export default function Category() {
                             icon: "success",
                             message: response.errorSchema.errorMessage
                         })
-                        setCreateCategoryReq({
-                            name: ""
+                    }
+                },
+                error: (error) => {
+                    setNotification({
+                        icon: "error",
+                        message: error.response.data.errorSchema?.errorMessage ?? error.response.statusText
+                    })
+                }
+            })
+    }
+
+    const doDeleteCategory = (): void => {
+        useCaseFactory.useDeleteCategoryUseCase().execute(deleteCategoryReq)
+            .pipe(
+                finalize(() => {
+                    setIsModalDeleteOpen(false)
+                    getCategoryList()
+                })
+            )
+            .subscribe({
+                next: (response: BaseResp) => {
+                    if (response.errorSchema.errorCode === 200) {
+                        setNotification({
+                            icon: "success",
+                            message: response.errorSchema.errorMessage
                         })
                     }
                 },
@@ -123,7 +151,7 @@ export default function Category() {
 
     const displayCreateModal = () => {
         return <CustomModal
-            title="Tambah Loker"
+            title="Tambah Kategori"
             open={isModalCreateOpen}
             onClose={() => setIsModalCreateOpen(false)}
         >
@@ -147,7 +175,7 @@ export default function Category() {
 
     const displayUpdateModal = () => {
         return <CustomModal
-            title="Edit Loker"
+            title="Edit Kategori"
             open={isModalUpdateOpen}
             onClose={() => setIsModalUpdateOpen(false)}
         >
@@ -165,6 +193,27 @@ export default function Category() {
                 onClick={doUpdateCategory}
             >
                 Simpan
+            </Button>
+        </CustomModal>
+    }
+
+    const displayDeleteModal = () => {
+        return <CustomModal
+            title="Hapus Kategori"
+            open={isModalDeleteOpen}
+            onClose={() => setIsModalDeleteOpen(false)}
+        >
+            <Typography
+                fontWeight="bold"
+            >
+                Yakin hapus loker ini ?
+            </Typography>
+            <Button
+                variant="contained"
+                color="error"
+                onClick={doDeleteCategory}
+            >
+                Hapus
             </Button>
         </CustomModal>
     }
@@ -208,6 +257,7 @@ export default function Category() {
     >
         {displayCreateModal()}
         {displayUpdateModal()}
+        {displayDeleteModal()}
         <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
@@ -268,6 +318,18 @@ export default function Category() {
                                             }}
                                         >
                                             Edit
+                                        </Button>
+                                        <Button
+                                            variant="contained"
+                                            color="error"
+                                            onClick={() => {
+                                                setDeleteCategoryReq({
+                                                    id: category.id
+                                                })
+                                                setIsModalDeleteOpen(true)
+                                            }}
+                                        >
+                                            Hapus
                                         </Button>
                                     </Stack>
                                 </TableCell>

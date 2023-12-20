@@ -1,6 +1,7 @@
 import { Observable, from, map } from "rxjs"
 import { BaseResp } from "../types/BaseResp"
 import { CreateCategoryReq } from "../types/category/CreateCategoryReq"
+import { DeleteCategoryReq } from "../types/category/DeleteCategoryReq"
 import { UpdateCategoryReq } from "../types/category/UpdateCategoryReq"
 import { GetLockersResp } from "../types/locker/GetLockersResp"
 import { BaseService, BaseServiceImpl } from "./BaseService"
@@ -25,6 +26,13 @@ export class CategoryService {
 
     update(updateCategoryReq: UpdateCategoryReq): Observable<BaseResp> {
         return from(this.baseService.httpPost(this.endPoint + "/update", updateCategoryReq))
+            .pipe(
+                map((response) => response.data as BaseResp)
+            )
+    }
+
+    remove(deleteCategoryReq: DeleteCategoryReq): Observable<BaseResp> {
+        return from(this.baseService.httpPost(this.endPoint + "/delete", deleteCategoryReq))
             .pipe(
                 map((response) => response.data as BaseResp)
             )

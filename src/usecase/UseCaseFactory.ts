@@ -1,4 +1,5 @@
 import { CreateCategoryUseCase, CreateCategoryUseCaseImpl } from "./category/CreateCategoryUseCase"
+import { DeleteCategoryUseCase, DeleteCategoryUseCaseImpl } from "./category/DeleteCategoryUseCase"
 import { GetCategorysUseCase, GetCategorysUseCaseImpl } from "./category/GetCategorysUseCase"
 import { UpdateCategoryUseCase, UpdateCategoryUseCaseImpl } from "./category/UpdateCategoryUseCase"
 import { DownloadFileUseCase, DownloadFileUseCaseImpl } from "./data/DownloadFileUseCase"
@@ -30,6 +31,7 @@ export interface UseCaseFactory {
     useGetCategorysUseCase(): GetCategorysUseCase
     useCreateCategoryUseCase(): CreateCategoryUseCase
     useUpdateCategoryUseCase(): UpdateCategoryUseCase
+    useDeleteCategoryUseCase(): DeleteCategoryUseCase
 }
 
 export class UseCaseFactoryImpl implements UseCaseFactory {
@@ -74,5 +76,8 @@ export class UseCaseFactoryImpl implements UseCaseFactory {
     }
     useUpdateCategoryUseCase(): UpdateCategoryUseCase {
         return new UpdateCategoryUseCaseImpl()
+    }
+    useDeleteCategoryUseCase(): DeleteCategoryUseCase {
+        return new DeleteCategoryUseCaseImpl()
     }
 }

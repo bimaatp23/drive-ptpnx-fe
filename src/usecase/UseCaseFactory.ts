@@ -22,16 +22,16 @@ export interface UseCaseFactory {
     useGetDatasUseCase(): GetDatasUseCase
     useUploadDataUseCase(): UploadDataUseCase
     useDownloadFileUseCase(): DownloadFileUseCase
-    // Locker
-    useGetLockersUseCase(): GetLockersUseCase
-    useCreateLockerUseCase(): CreateLockerUseCase
-    useUpdateLockerUseCase(): UpdateLockerUseCase
-    useDeleteLockerUseCase(): DeleteLockerUseCase
     // Category
     useGetCategorysUseCase(): GetCategorysUseCase
     useCreateCategoryUseCase(): CreateCategoryUseCase
     useUpdateCategoryUseCase(): UpdateCategoryUseCase
     useDeleteCategoryUseCase(): DeleteCategoryUseCase
+    // Locker
+    useGetLockersUseCase(): GetLockersUseCase
+    useCreateLockerUseCase(): CreateLockerUseCase
+    useUpdateLockerUseCase(): UpdateLockerUseCase
+    useDeleteLockerUseCase(): DeleteLockerUseCase
 }
 
 export class UseCaseFactoryImpl implements UseCaseFactory {
@@ -55,6 +55,19 @@ export class UseCaseFactoryImpl implements UseCaseFactory {
     useDownloadFileUseCase(): DownloadFileUseCase {
         return new DownloadFileUseCaseImpl()
     }
+    // Category
+    useGetCategorysUseCase(): GetCategorysUseCase {
+        return new GetCategorysUseCaseImpl()
+    }
+    useCreateCategoryUseCase(): CreateCategoryUseCase {
+        return new CreateCategoryUseCaseImpl()
+    }
+    useUpdateCategoryUseCase(): UpdateCategoryUseCase {
+        return new UpdateCategoryUseCaseImpl()
+    }
+    useDeleteCategoryUseCase(): DeleteCategoryUseCase {
+        return new DeleteCategoryUseCaseImpl()
+    }
     // Locker
     useGetLockersUseCase(): GetLockersUseCase {
         return new GetLockersUseCaseImpl()
@@ -67,17 +80,5 @@ export class UseCaseFactoryImpl implements UseCaseFactory {
     }
     useDeleteLockerUseCase(): DeleteLockerUseCase {
         return new DeleteLockerUseCaseImpl()
-    }
-    useGetCategorysUseCase(): GetCategorysUseCase {
-        return new GetCategorysUseCaseImpl()
-    }
-    useCreateCategoryUseCase(): CreateCategoryUseCase {
-        return new CreateCategoryUseCaseImpl()
-    }
-    useUpdateCategoryUseCase(): UpdateCategoryUseCase {
-        return new UpdateCategoryUseCaseImpl()
-    }
-    useDeleteCategoryUseCase(): DeleteCategoryUseCase {
-        return new DeleteCategoryUseCaseImpl()
     }
 }

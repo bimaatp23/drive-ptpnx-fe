@@ -2,14 +2,17 @@ import { Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, S
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers"
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns"
 import moment from "moment"
-import { ChangeEvent, useMemo, useState } from "react"
+import { ChangeEvent, useEffect, useMemo, useState } from "react"
 import { setNotification } from "../Util"
 import ImageViewer from "../components/ImageViewer"
 import MainPage from "../components/MainPage"
 import PDFViewer from "../components/PDFViewer"
 import { BaseResp } from "../types/BaseResp"
-import BasicConstant from "../types/BasicConstant"
+import { Category } from "../types/category/Category"
+import { GetCategorysResp } from "../types/category/GetCategorysResp"
 import { UploadDataReq } from "../types/data/UploadDataReq"
+import { GetLockersResp } from "../types/locker/GetLockersResp"
+import { Locker } from "../types/locker/Locker"
 import { UseCaseFactory, UseCaseFactoryImpl } from "../usecase/UseCaseFactory"
 
 export default function Upload() {
@@ -18,10 +21,49 @@ export default function Upload() {
         date: moment().format("YYYY-MM-DD"),
         documentNumber: "",
         description: "",
-        category: "",
+        categoryId: "",
+        lockerId: "",
         file: undefined
     })
     const [fileValue, setFileValue] = useState<string>("")
+    const [categorys, setCategorys] = useState<Category[]>([])
+    const [lockers, setLockers] = useState<Locker[]>([])
+
+    const [isStatic, setIsStatic] = useState<boolean>(false)
+    useEffect(() => setIsStatic(true), [])
+
+    useEffect(() => {
+        if (isStatic) {
+            useCaseFactory.useGetCategorysUseCase().execute()
+                .subscribe({
+                    next: (response: GetCategorysResp) => {
+                        if (response.errorSchema.errorCode === 200) {
+                            setCategorys(response.outputSchema)
+                        }
+                    },
+                    error: (error) => {
+                        setNotification({
+                            icon: "error",
+                            message: error.response.data.errorSchema?.errorMessage ?? error.response.statusText
+                        })
+                    }
+                })
+            useCaseFactory.useGetLockersUseCase().execute()
+                .subscribe({
+                    next: (response: GetLockersResp) => {
+                        if (response.errorSchema.errorCode === 200) {
+                            setLockers(response.outputSchema)
+                        }
+                    },
+                    error: (error) => {
+                        setNotification({
+                            icon: "error",
+                            message: error.response.data.errorSchema?.errorMessage ?? error.response.statusText
+                        })
+                    }
+                })
+        }
+    }, [isStatic, useCaseFactory])
 
     const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent<any>): void => {
         const { name, value } = e.target
@@ -70,7 +112,7 @@ export default function Upload() {
                         icon: "success",
                         message: response.errorSchema.errorMessage
                     })
-                    window.location.assign("/" + uploadDataReq.category)
+                    window.location.assign("/data")
                 },
                 error: (error) => {
                     setNotification({
@@ -131,20 +173,35 @@ export default function Upload() {
                 sx={{ background: "white" }}
             />
             <FormControl fullWidth>
-                <InputLabel id="label-kategori" size="small">Kategori</InputLabel>
+                <InputLabel id="label-category" size="small">Kategori</InputLabel>
                 <Select
-                    name="category"
+                    name="categoryId"
                     label="Kategori"
                     size="small"
-                    value={uploadDataReq.category}
+                    value={uploadDataReq.categoryId}
                     onChange={handleChange}
-                    labelId="label-kategori"
+                    labelId="label-category"
                     sx={{ background: "white" }}
                 >
-                    <MenuItem value={BasicConstant.KATEGORI_KASBON}>{BasicConstant.KATEGORI_KASBON.toUpperCase()}</MenuItem>
-                    <MenuItem value={BasicConstant.KATEGORI_MEMORIAL}>{BasicConstant.KATEGORI_MEMORIAL.toUpperCase()}</MenuItem>
-                    <MenuItem value={BasicConstant.KATEGORI_NERACA}>{BasicConstant.KATEGORI_NERACA.toUpperCase()}</MenuItem>
-                    <MenuItem value={BasicConstant.KATEGORI_UMUM}>{BasicConstant.KATEGORI_UMUM.toUpperCase()}</MenuItem>
+                    {categorys.map((category) => {
+                        return <MenuItem value={category.id}>{category.name}</MenuItem>
+                    })}
+                </Select>
+            </FormControl>
+            <FormControl fullWidth>
+                <InputLabel id="label-locker" size="small">Loker</InputLabel>
+                <Select
+                    name="lockerId"
+                    label="Loker"
+                    size="small"
+                    value={uploadDataReq.lockerId}
+                    onChange={handleChange}
+                    labelId="label-locker"
+                    sx={{ background: "white" }}
+                >
+                    {lockers.map((locker) => {
+                        return <MenuItem value={locker.id}>{locker.name}</MenuItem>
+                    })}
                 </Select>
             </FormControl>
             <TextField

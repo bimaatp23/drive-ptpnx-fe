@@ -1,17 +1,19 @@
+import { Button, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material"
 import moment from "moment"
 import { useEffect, useMemo, useState } from "react"
-import { useParams } from "react-router-dom"
 import { setNotification } from "../Util"
-import DataTable from "../components/DataTable"
 import MainPage from "../components/MainPage"
 import SearchControl from "../components/SearchControl"
+import { Category } from "../types/category/Category"
+import { GetCategorysResp } from "../types/category/GetCategorysResp"
 import { Data as DataType } from "../types/data/Data"
 import { GetDatasReq } from "../types/data/GetDatasReq"
 import { GetDatasResp } from "../types/data/GetDatasResp"
+import { GetLockersResp } from "../types/locker/GetLockersResp"
+import { Locker } from "../types/locker/Locker"
 import { UseCaseFactory, UseCaseFactoryImpl } from "../usecase/UseCaseFactory"
 
 export default function Data() {
-    const { category } = useParams()
     const useCaseFactory: UseCaseFactory = useMemo(() => new UseCaseFactoryImpl(), [])
     const currentDate: Date = useMemo(() => new Date(), [])
     const aYearAgo: Date = useMemo(() => {
@@ -21,12 +23,15 @@ export default function Data() {
     }, [currentDate])
     const [datas, setDatas] = useState<DataType[]>([])
     const [getDatasReq, setGetDatasReq] = useState<GetDatasReq>({
-        category: category as string,
+        categoryId: "",
+        lockerId: "",
         dateFrom: moment(aYearAgo).format("YYYY-MM-DD"),
         dateUntil: moment(currentDate).format("YYYY-MM-DD"),
         description: "",
         documentNumber: ""
     })
+    const [categorys, setCategorys] = useState<Category[]>([])
+    const [lockers, setLockers] = useState<Locker[]>([])
 
     const [isStatic, setIsStatic] = useState<boolean>(false)
     useEffect(() => setIsStatic(true), [])
@@ -34,7 +39,8 @@ export default function Data() {
     useEffect(() => {
         if (isStatic) {
             const firstGetDatasReq: GetDatasReq = {
-                category: category as string,
+                categoryId: "",
+                lockerId: "",
                 dateFrom: moment(aYearAgo).format("YYYY-MM-DD"),
                 dateUntil: moment(currentDate).format("YYYY-MM-DD"),
                 description: "",
@@ -54,8 +60,36 @@ export default function Data() {
                         })
                     }
                 })
+            useCaseFactory.useGetCategorysUseCase().execute()
+                .subscribe({
+                    next: (response: GetCategorysResp) => {
+                        if (response.errorSchema.errorCode === 200) {
+                            setCategorys(response.outputSchema)
+                        }
+                    },
+                    error: (error) => {
+                        setNotification({
+                            icon: "error",
+                            message: error.response.data.errorSchema?.errorMessage ?? error.response.statusText
+                        })
+                    }
+                })
+            useCaseFactory.useGetLockersUseCase().execute()
+                .subscribe({
+                    next: (response: GetLockersResp) => {
+                        if (response.errorSchema.errorCode === 200) {
+                            setLockers(response.outputSchema)
+                        }
+                    },
+                    error: (error) => {
+                        setNotification({
+                            icon: "error",
+                            message: error.response.data.errorSchema?.errorMessage ?? error.response.statusText
+                        })
+                    }
+                })
         }
-    }, [isStatic, useCaseFactory, category, currentDate, aYearAgo])
+    }, [isStatic, useCaseFactory, currentDate, aYearAgo])
 
     const loadData = (): void => {
         useCaseFactory.useGetDatasUseCase().execute(getDatasReq)
@@ -74,8 +108,29 @@ export default function Data() {
             })
     }
 
+    const handleDownload = (data: DataType): void => {
+        const { id, file, documentNumber } = data
+        useCaseFactory.useDownloadFileUseCase().execute(id)
+            .subscribe({
+                next: (response: string) => {
+                    console.log(response)
+                    let downloadLink = document.createElement("a")
+                    downloadLink.href = response
+                    downloadLink.download = [documentNumber, file.split(".")[1]].join(".")
+                    downloadLink.text = "link"
+                    downloadLink.click()
+                },
+                error: (error) => {
+                    setNotification({
+                        icon: "error",
+                        message: error.response.data.errorSchema?.errorMessage ?? error.response.statusText
+                    })
+                }
+            })
+    }
+
     return <MainPage
-        title={category as string}
+        title="Data"
     >
         <SearchControl
             getDatasReq={getDatasReq}
@@ -83,8 +138,118 @@ export default function Data() {
             doSearch={() => loadData()}
         />
         <br />
-        <DataTable
-            datas={datas}
-        />
+        <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead>
+                    <TableRow>
+                        <TableCell
+                            sx={{ fontWeight: "bold" }}
+                            align="center"
+                        >
+                            #
+                        </TableCell>
+                        <TableCell
+                            sx={{ fontWeight: "bold" }}
+                            align="center"
+                        >
+                            Tanggal
+                        </TableCell>
+                        <TableCell
+                            sx={{ fontWeight: "bold" }}
+                            align="center"
+                        >
+                            No Dokumen
+                        </TableCell>
+                        <TableCell
+                            sx={{ fontWeight: "bold" }}
+                            align="center"
+                        >
+                            Keterangan
+                        </TableCell>
+                        <TableCell
+                            sx={{ fontWeight: "bold" }}
+                            align="center"
+                        >
+                            Kategori
+                        </TableCell>
+                        <TableCell
+                            sx={{ fontWeight: "bold" }}
+                            align="center"
+                        >
+                            Loker
+                        </TableCell>
+                        <TableCell
+                            sx={{ fontWeight: "bold" }}
+                            align="center"
+                        >
+                            Action
+                        </TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {datas.length > 0 ?
+                        datas.map((data, index) =>
+                            <TableRow key={index}>
+                                <TableCell
+                                    sx={{ fontWeight: "bold" }}
+                                    align="center"
+                                >
+                                    {index + 1}
+                                </TableCell>
+                                <TableCell
+                                    align="center"
+                                >
+                                    {moment(data.date, "YYYY-MM-DD").format("DD/MM/YYYY")}
+                                </TableCell>
+                                <TableCell
+                                    align="center"
+                                >
+                                    {data.documentNumber}
+                                </TableCell>
+                                <TableCell>
+                                    {data.description}
+                                </TableCell>
+                                <TableCell
+                                    align="center"
+                                >
+                                    {categorys.find((category) => category.id === data.categoryId)?.name}
+                                </TableCell>
+                                <TableCell
+                                    align="center"
+                                >
+                                    {lockers.find((locker) => locker.id === data.lockerId)?.name}
+                                </TableCell>
+                                <TableCell
+                                    align="center"
+                                >
+                                    <Stack
+                                        width="100%"
+                                        display="flex"
+                                        flexDirection="row"
+                                        columnGap={2}
+                                        justifyContent="center"
+                                    >
+                                        <Button
+                                            variant="contained"
+                                            onClick={() => handleDownload(data)}
+                                        >
+                                            Download
+                                        </Button>
+                                    </Stack>
+                                </TableCell>
+                            </TableRow>
+                        )
+                        :
+                        <TableRow>
+                            <TableCell
+                                colSpan={7}
+                                align="center"
+                            >
+                                No Data Available
+                            </TableCell>
+                        </TableRow>}
+                </TableBody>
+            </Table>
+        </TableContainer>
     </MainPage>
 }

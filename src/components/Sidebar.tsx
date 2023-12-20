@@ -71,28 +71,16 @@ export default function Sidebar(props: Props) {
                     label: "Upload"
                 },
                 {
-                    path: "/kasbon",
-                    label: "Kasbon"
-                },
-                {
-                    path: "/memorial",
-                    label: "Memorial"
-                },
-                {
-                    path: "/neraca",
-                    label: "Neraca"
-                },
-                {
-                    path: "/umum",
-                    label: "Umum"
-                },
-                {
-                    path: "/locker",
-                    label: "Loker"
+                    path: "/data",
+                    label: "Data"
                 },
                 {
                     path: "/category",
                     label: "Kategori"
+                },
+                {
+                    path: "/locker",
+                    label: "Loker"
                 }
             ])}
         </Stack>

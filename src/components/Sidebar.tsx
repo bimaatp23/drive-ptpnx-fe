@@ -89,6 +89,10 @@ export default function Sidebar(props: Props) {
                 {
                     path: "/locker",
                     label: "Loker"
+                },
+                {
+                    path: "/category",
+                    label: "Kategori"
                 }
             ])}
         </Stack>

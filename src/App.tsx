@@ -1,5 +1,6 @@
 import { Stack } from "@mui/material"
 import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom"
+import Category from "./pages/Category"
 import ChangePassword from "./pages/ChangePassword"
 import Dashboard from "./pages/Dashboard"
 import Data from "./pages/Data"
@@ -44,6 +45,7 @@ export default function App() {
     middlewareIsLogin("/upload", <Upload />),
     middlewareIsLogin("/:category", <Data />),
     middlewareIsLogin("/locker", <Locker />),
+    middlewareIsLogin("/category", <Category />),
     middlewareIsLogin("/change-password", <ChangePassword />),
     middlewareIsNotLogin("/login", <Login />)
   ])

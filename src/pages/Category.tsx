@@ -206,7 +206,7 @@ export default function Category() {
             <Typography
                 fontWeight="bold"
             >
-                Yakin hapus loker ini ?
+                Yakin hapus kategori ini ?
             </Typography>
             <Button
                 variant="contained"

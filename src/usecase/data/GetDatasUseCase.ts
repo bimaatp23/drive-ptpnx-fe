@@ -9,6 +9,6 @@ export interface GetDatasUseCase {
 
 export class GetDatasUseCaseImpl implements GetDatasUseCase {
     execute(getDatasReq: GetDatasReq): Observable<GetDatasResp> {
-        return new DataService().getByCategory(getDatasReq)
+        return new DataService().getDatas(getDatasReq)
     }
 }

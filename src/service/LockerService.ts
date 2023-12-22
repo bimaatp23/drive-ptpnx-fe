@@ -18,21 +18,21 @@ export class LockerService {
     }
 
     create(createLockerReq: CreateLockerReq): Observable<BaseResp> {
-        return from(this.baseService.httpPost(this.endPoint + "/create", createLockerReq))
+        return from(this.baseService.httpPost(this.endPoint, createLockerReq))
             .pipe(
                 map((response) => response.data as BaseResp)
             )
     }
 
     update(updateLockerReq: UpdateLockerReq): Observable<BaseResp> {
-        return from(this.baseService.httpPost(this.endPoint + "/update", updateLockerReq))
+        return from(this.baseService.httpPut(this.endPoint + "/" + updateLockerReq.id, updateLockerReq))
             .pipe(
                 map((response) => response.data as BaseResp)
             )
     }
 
     remove(deleteLockerReq: DeleteLockerReq): Observable<BaseResp> {
-        return from(this.baseService.httpPost(this.endPoint + "/delete", deleteLockerReq))
+        return from(this.baseService.httpDelete(this.endPoint + "/" + deleteLockerReq.id))
             .pipe(
                 map((response) => response.data as BaseResp)
             )

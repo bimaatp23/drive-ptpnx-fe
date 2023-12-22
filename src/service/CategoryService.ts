@@ -18,21 +18,21 @@ export class CategoryService {
     }
 
     create(createCategoryReq: CreateCategoryReq): Observable<BaseResp> {
-        return from(this.baseService.httpPost(this.endPoint + "/create", createCategoryReq))
+        return from(this.baseService.httpPost(this.endPoint, createCategoryReq))
             .pipe(
                 map((response) => response.data as BaseResp)
             )
     }
 
     update(updateCategoryReq: UpdateCategoryReq): Observable<BaseResp> {
-        return from(this.baseService.httpPost(this.endPoint + "/update", updateCategoryReq))
+        return from(this.baseService.httpPut(this.endPoint + "/" + updateCategoryReq.id, updateCategoryReq))
             .pipe(
                 map((response) => response.data as BaseResp)
             )
     }
 
     remove(deleteCategoryReq: DeleteCategoryReq): Observable<BaseResp> {
-        return from(this.baseService.httpPost(this.endPoint + "/delete", deleteCategoryReq))
+        return from(this.baseService.httpDelete(this.endPoint + "/" + deleteCategoryReq.id))
             .pipe(
                 map((response) => response.data as BaseResp)
             )

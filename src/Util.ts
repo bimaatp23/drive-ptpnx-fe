@@ -14,3 +14,9 @@ export function setNotification(props: setNotificationProps) {
         timer: 5000
     })
 }
+
+export function removeEmptyParams(existingObject: any): any {
+    return Object.fromEntries(
+        Object.entries(existingObject).filter(([_, value]) => value !== "")
+    )
+}

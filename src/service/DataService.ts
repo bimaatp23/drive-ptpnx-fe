@@ -1,10 +1,10 @@
 import { Observable, from, map } from "rxjs"
+import { removeEmptyParams } from "../Util"
 import { BaseResp } from "../types/BaseResp"
 import { GetDatasReq } from "../types/data/GetDatasReq"
 import { GetDatasResp } from "../types/data/GetDatasResp"
 import { UploadDataReq } from "../types/data/UploadDataReq"
 import { BaseService, BaseServiceImpl } from "./BaseService"
-import { removeEmptyParams } from "../Util"
 
 export class DataService {
     readonly endPoint: string = "/data"
@@ -26,12 +26,24 @@ export class DataService {
             )
     }
 
-    download(id: string): Observable<string> {
+    download(id: string): Observable<File> {
         return from(this.baseService.httpGet(this.endPoint + "/" + id, { responseType: "arraybuffer" }))
             .pipe(
                 map((response) => {
-                    const blob = new Blob([response.data], { type: "application/octet-stream" })
-                    return window.URL.createObjectURL(blob)
+                    const contentType = (response.headers.get as (headerName: string) => string | null)("content-type")
+                    let fileExtension = "unknown"
+                    if (contentType) {
+                        if (contentType.includes("application/pdf")) {
+                            fileExtension = "pdf"
+                        } else if (contentType.includes("image/png")) {
+                            fileExtension = "png"
+                        } else if (contentType.includes("image/jpeg") || contentType.includes("image/jpg")) {
+                            fileExtension = "jpeg"
+                        }
+                    }
+                    const filename = `${id}.${fileExtension}`
+                    const file: File = new File([response.data], filename, { type: contentType ?? "application/octet-stream" })
+                    return file
                 })
             )
     }

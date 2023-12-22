@@ -157,6 +157,7 @@ export default function Locker() {
             title="Tambah Loker"
             open={isModalCreateOpen}
             onClose={() => setIsModalCreateOpen(false)}
+            size="small"
         >
             <TextField
                 size="small"
@@ -191,6 +192,7 @@ export default function Locker() {
             title="Edit Loker"
             open={isModalUpdateOpen}
             onClose={() => setIsModalUpdateOpen(false)}
+            size="small"
         >
             <TextField
                 size="small"
@@ -225,6 +227,7 @@ export default function Locker() {
             title="Hapus Loker"
             open={isModalDeleteOpen}
             onClose={() => setIsModalDeleteOpen(false)}
+            size="small"
         >
             <Typography
                 fontWeight="bold"

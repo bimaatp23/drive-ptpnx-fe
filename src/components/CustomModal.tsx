@@ -5,6 +5,7 @@ interface Props {
     title: string
     open: boolean
     onClose(): void
+    size: "small" | "medium" | "large"
     children?: ReactNode
 }
 
@@ -13,7 +14,6 @@ const style = {
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: 400,
     bgcolor: "background.paper",
     borderRadius: "10px",
     p: 2
@@ -24,7 +24,10 @@ export default function CustomModal(props: Props) {
         open={props.open}
         onClose={props.onClose}
     >
-        <Box sx={style}>
+        <Box sx={{
+            ...style,
+            width: props.size === "small" ? 400 : props.size === "medium" ? 800 : 1200,
+        }}>
             <Stack
                 display="flex"
                 rowGap={2}

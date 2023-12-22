@@ -154,6 +154,7 @@ export default function Category() {
             title="Tambah Kategori"
             open={isModalCreateOpen}
             onClose={() => setIsModalCreateOpen(false)}
+            size="small"
         >
             <TextField
                 size="small"
@@ -178,6 +179,7 @@ export default function Category() {
             title="Edit Kategori"
             open={isModalUpdateOpen}
             onClose={() => setIsModalUpdateOpen(false)}
+            size="small"
         >
             <TextField
                 size="small"
@@ -202,6 +204,7 @@ export default function Category() {
             title="Hapus Kategori"
             open={isModalDeleteOpen}
             onClose={() => setIsModalDeleteOpen(false)}
+            size="small"
         >
             <Typography
                 fontWeight="bold"

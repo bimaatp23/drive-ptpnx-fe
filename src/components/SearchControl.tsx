@@ -1,15 +1,25 @@
-import { Button, Grid, Stack, TextField } from "@mui/material"
-import { ChangeEvent } from "react"
+import { Button, FormControl, Grid, InputLabel, MenuItem, Select, SelectChangeEvent, Stack, TextField } from "@mui/material"
+import { ChangeEvent, KeyboardEvent } from "react"
+import { Category } from "../types/category/Category"
 import { GetDatasReq } from "../types/data/GetDatasReq"
+import { Locker } from "../types/locker/Locker"
 
 interface Props {
-    getDatasReq: GetDatasReq,
-    setGetDatasReq(value: GetDatasReq): void,
+    getDatasReq: GetDatasReq
+    categorys: Category[]
+    lockers: Locker[]
+    setGetDatasReq(value: GetDatasReq): void
     doSearch(): void
 }
 
 export default function SearchControl(props: Props) {
-    const displayTanggalFrom = () => {
+    const handleOnEnter = (e: KeyboardEvent<HTMLDivElement>) => {
+        if (e.key === "Enter") {
+            props.doSearch()
+        }
+    }
+
+    const displayDateFrom = () => {
         return <TextField
             label="Tanggal From"
             type="date"
@@ -26,10 +36,11 @@ export default function SearchControl(props: Props) {
             InputLabelProps={{
                 shrink: true,
             }}
+            onKeyDown={handleOnEnter}
         />
     }
 
-    const displayTanggalUntil = () => {
+    const displayDateUntil = () => {
         return <TextField
             label="Tanggal Until"
             type="date"
@@ -46,10 +57,11 @@ export default function SearchControl(props: Props) {
             InputLabelProps={{
                 shrink: true,
             }}
+            onKeyDown={handleOnEnter}
         />
     }
 
-    const displayNoDokumen = () => {
+    const displayDocumentNumber = () => {
         return <TextField
             label="No Dokumen"
             size="small"
@@ -62,10 +74,11 @@ export default function SearchControl(props: Props) {
             sx={{
                 background: "white"
             }}
+            onKeyDown={handleOnEnter}
         />
     }
 
-    const displayKeterangan = () => {
+    const displayDescription = () => {
         return <TextField
             label="Keterangan"
             size="small"
@@ -78,7 +91,54 @@ export default function SearchControl(props: Props) {
             sx={{
                 background: "white"
             }}
+            onKeyDown={handleOnEnter}
         />
+    }
+
+    const displayCategory = () => {
+        return <FormControl fullWidth>
+            <InputLabel id="label-category" size="small">Kategori</InputLabel>
+            <Select
+                name="categoryId"
+                label="Kategori"
+                size="small"
+                value={props.getDatasReq.categoryId}
+                onChange={(event: SelectChangeEvent<string>) => props.setGetDatasReq({
+                    ...props.getDatasReq,
+                    categoryId: event.target.value
+                })}
+                labelId="label-category"
+                sx={{ background: "white" }}
+            >
+                <MenuItem>No Filter</MenuItem>
+                {props.categorys.map((category) => {
+                    return <MenuItem value={category.id}>{category.name}</MenuItem>
+                })}
+            </Select>
+        </FormControl>
+    }
+
+    const displayLocker = () => {
+        return <FormControl fullWidth>
+            <InputLabel id="label-locker" size="small">Loker</InputLabel>
+            <Select
+                name="lockerId"
+                label="Loker"
+                size="small"
+                value={props.getDatasReq.lockerId}
+                onChange={(event: SelectChangeEvent<string>) => props.setGetDatasReq({
+                    ...props.getDatasReq,
+                    lockerId: event.target.value
+                })}
+                labelId="label-locker"
+                sx={{ background: "white" }}
+            >
+                <MenuItem>No Filter</MenuItem>
+                {props.lockers.map((locker) => {
+                    return <MenuItem value={locker.id}>{locker.name}</MenuItem>
+                })}
+            </Select>
+        </FormControl>
     }
 
     const displaySearchButton = () => {
@@ -93,17 +153,23 @@ export default function SearchControl(props: Props) {
 
     return <Stack>
         <Grid container width="100%" columnSpacing={2}>
-            <Grid item sm={2}>
-                {displayTanggalFrom()}
+            <Grid item sm={1.5}>
+                {displayDateFrom()}
+            </Grid>
+            <Grid item sm={1.5}>
+                {displayDateUntil()}
             </Grid>
             <Grid item sm={2}>
-                {displayTanggalUntil()}
+                {displayDocumentNumber()}
             </Grid>
             <Grid item sm={3}>
-                {displayNoDokumen()}
+                {displayDescription()}
             </Grid>
-            <Grid item sm={4}>
-                {displayKeterangan()}
+            <Grid item sm={2}>
+                {displayCategory()}
+            </Grid>
+            <Grid item sm={1}>
+                {displayLocker()}
             </Grid>
             <Grid item sm={1}>
                 {displaySearchButton()}

@@ -134,6 +134,8 @@ export default function Data() {
     >
         <SearchControl
             getDatasReq={getDatasReq}
+            categorys={categorys}
+            lockers={lockers}
             setGetDatasReq={(value: GetDatasReq) => setGetDatasReq(value)}
             doSearch={() => loadData()}
         />

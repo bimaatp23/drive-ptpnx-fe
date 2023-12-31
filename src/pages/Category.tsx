@@ -6,16 +6,15 @@ import { setNotification } from "../Util"
 import CustomModal from "../components/CustomModal"
 import MainPage from "../components/MainPage"
 import { BaseResp } from "../types/BaseResp"
-import { Category as CategoryType } from "../types/category/Category"
 import { CreateCategoryReq } from "../types/category/CreateCategoryReq"
 import { DeleteCategoryReq } from "../types/category/DeleteCategoryReq"
-import { GetCategorysResp } from "../types/category/GetCategorysResp"
+import { GetCategorys, GetCategorysResp } from "../types/category/GetCategorysResp"
 import { UpdateCategoryReq } from "../types/category/UpdateCategoryReq"
 import { UseCaseFactory, UseCaseFactoryImpl } from "../usecase/UseCaseFactory"
 
 export default function Category() {
     const useCaseFactory: UseCaseFactory = useMemo(() => new UseCaseFactoryImpl(), [])
-    const [categorys, setCategorys] = useState<CategoryType[]>([])
+    const [categorys, setCategorys] = useState<GetCategorys[]>([])
     const [createCategoryReq, setCreateCategoryReq] = useState<CreateCategoryReq>({
         name: ""
     })
@@ -329,6 +328,7 @@ export default function Category() {
                                                     })
                                                     setIsModalUpdateOpen(true)
                                                 }}
+                                                disabled={category.usageCount > 0}
                                             >
                                                 <Edit />
                                             </Button>
@@ -346,6 +346,7 @@ export default function Category() {
                                                     })
                                                     setIsModalDeleteOpen(true)
                                                 }}
+                                                disabled={category.usageCount > 0}
                                             >
                                                 <Delete />
                                             </Button>

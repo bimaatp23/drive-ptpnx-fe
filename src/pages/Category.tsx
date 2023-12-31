@@ -8,13 +8,13 @@ import MainPage from "../components/MainPage"
 import { BaseResp } from "../types/BaseResp"
 import { CreateCategoryReq } from "../types/category/CreateCategoryReq"
 import { DeleteCategoryReq } from "../types/category/DeleteCategoryReq"
-import { GetCategorys, GetCategorysResp } from "../types/category/GetCategorysResp"
+import { GetCategory, GetCategorysResp } from "../types/category/GetCategorysResp"
 import { UpdateCategoryReq } from "../types/category/UpdateCategoryReq"
 import { UseCaseFactory, UseCaseFactoryImpl } from "../usecase/UseCaseFactory"
 
 export default function Category() {
     const useCaseFactory: UseCaseFactory = useMemo(() => new UseCaseFactoryImpl(), [])
-    const [categorys, setCategorys] = useState<GetCategorys[]>([])
+    const [categorys, setCategorys] = useState<GetCategory[]>([])
     const [createCategoryReq, setCreateCategoryReq] = useState<CreateCategoryReq>({
         name: ""
     })

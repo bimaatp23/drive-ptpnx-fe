@@ -8,14 +8,13 @@ import MainPage from "../components/MainPage"
 import { BaseResp } from "../types/BaseResp"
 import { CreateLockerReq } from "../types/locker/CreateLockerReq"
 import { DeleteLockerReq } from "../types/locker/DeleteLockerReq"
-import { GetLockersResp } from "../types/locker/GetLockersResp"
-import { Locker as LockerType } from "../types/locker/Locker"
+import { GetLocker, GetLockersResp } from "../types/locker/GetLockersResp"
 import { UpdateLockerReq } from "../types/locker/UpdateLockerReq"
 import { UseCaseFactory, UseCaseFactoryImpl } from "../usecase/UseCaseFactory"
 
 export default function Locker() {
     const useCaseFactory: UseCaseFactory = useMemo(() => new UseCaseFactoryImpl(), [])
-    const [lockers, setLockers] = useState<LockerType[]>([])
+    const [lockers, setLockers] = useState<GetLocker[]>([])
     const [createLockerReq, setCreateLockerReq] = useState<CreateLockerReq>({
         name: "",
         capacity: 0
@@ -364,6 +363,7 @@ export default function Locker() {
                                                     })
                                                     setIsModalUpdateOpen(true)
                                                 }}
+                                                disabled={locker.usageCount > 0}
                                             >
                                                 <Edit />
                                             </Button>
@@ -381,6 +381,7 @@ export default function Locker() {
                                                     })
                                                     setIsModalDeleteOpen(true)
                                                 }}
+                                                disabled={locker.usageCount > 0}
                                             >
                                                 <Delete />
                                             </Button>

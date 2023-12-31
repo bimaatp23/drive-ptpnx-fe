@@ -1,4 +1,5 @@
-import { Button, FormControl, Grid, InputLabel, MenuItem, Select, SelectChangeEvent, Stack, TextField } from "@mui/material"
+import { Search } from "@mui/icons-material"
+import { Button, FormControl, Grid, InputLabel, MenuItem, Select, SelectChangeEvent, Stack, TextField, Tooltip } from "@mui/material"
 import { ChangeEvent, KeyboardEvent } from "react"
 import { Category } from "../types/category/Category"
 import { GetDatasReq } from "../types/data/GetDatasReq"
@@ -142,13 +143,18 @@ export default function SearchControl(props: Props) {
     }
 
     const displaySearchButton = () => {
-        return <Button
-            variant="contained"
-            color="primary"
-            onClick={() => props.doSearch()}
+        return <Tooltip
+            title="Search"
+            arrow
         >
-            Search
-        </Button>
+            <Button
+                variant="contained"
+                color="primary"
+                onClick={() => props.doSearch()}
+            >
+                <Search />
+            </Button>
+        </Tooltip>
     }
 
     return <Stack>
@@ -168,10 +174,10 @@ export default function SearchControl(props: Props) {
             <Grid item sm={2}>
                 {displayCategory()}
             </Grid>
-            <Grid item sm={1}>
+            <Grid item sm={1.5}>
                 {displayLocker()}
             </Grid>
-            <Grid item sm={1}>
+            <Grid item sm={0.5}>
                 {displaySearchButton()}
             </Grid>
         </Grid>

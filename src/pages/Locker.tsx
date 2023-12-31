@@ -1,4 +1,5 @@
-import { Button, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material"
+import { Add, Delete, Edit } from "@mui/icons-material"
+import { Button, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Tooltip, Typography } from "@mui/material"
 import { ChangeEvent, KeyboardEvent, useEffect, useMemo, useState } from "react"
 import { finalize } from "rxjs"
 import { setNotification } from "../Util"
@@ -273,12 +274,17 @@ export default function Locker() {
     return <MainPage
         title="Loker"
         headElement={
-            <Button
-                variant="contained"
-                onClick={() => setIsModalCreateOpen(true)}
+            <Tooltip
+                title="Tambah"
+                arrow
             >
-                Tambah Loker
-            </Button>
+                <Button
+                    variant="contained"
+                    onClick={() => setIsModalCreateOpen(true)}
+                >
+                    <Add />
+                </Button>
+            </Tooltip>
         }
     >
         {displayCreateModal()}
@@ -344,31 +350,41 @@ export default function Locker() {
                                         columnGap={2}
                                         justifyContent="center"
                                     >
-                                        <Button
-                                            variant="contained"
-                                            onClick={() => {
-                                                setUpdateLockerReq({
-                                                    id: locker.id,
-                                                    name: locker.name,
-                                                    capacity: locker.capacity
-                                                })
-                                                setIsModalUpdateOpen(true)
-                                            }}
+                                        <Tooltip
+                                            title="Edit"
+                                            arrow
                                         >
-                                            Edit
-                                        </Button>
-                                        <Button
-                                            variant="contained"
-                                            color="error"
-                                            onClick={() => {
-                                                setDeleteLockerReq({
-                                                    id: locker.id
-                                                })
-                                                setIsModalDeleteOpen(true)
-                                            }}
+                                            <Button
+                                                variant="contained"
+                                                onClick={() => {
+                                                    setUpdateLockerReq({
+                                                        id: locker.id,
+                                                        name: locker.name,
+                                                        capacity: locker.capacity
+                                                    })
+                                                    setIsModalUpdateOpen(true)
+                                                }}
+                                            >
+                                                <Edit />
+                                            </Button>
+                                        </Tooltip>
+                                        <Tooltip
+                                            title="Hapus"
+                                            arrow
                                         >
-                                            Hapus
-                                        </Button>
+                                            <Button
+                                                variant="contained"
+                                                color="error"
+                                                onClick={() => {
+                                                    setDeleteLockerReq({
+                                                        id: locker.id
+                                                    })
+                                                    setIsModalDeleteOpen(true)
+                                                }}
+                                            >
+                                                <Delete />
+                                            </Button>
+                                        </Tooltip>
                                     </Stack>
                                 </TableCell>
                             </TableRow>

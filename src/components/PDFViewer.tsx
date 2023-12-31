@@ -14,9 +14,7 @@ export default function PDFViewer(props: Props) {
 
         reader.onloadend = () => {
             const result = reader.result
-            if (typeof result === "string") {
-                setFileUrl(result)
-            }
+            setFileUrl(typeof result === "string" ? result : undefined)
         }
 
         reader.readAsDataURL(props.file)

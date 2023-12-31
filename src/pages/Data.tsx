@@ -1,9 +1,8 @@
-import { Button, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material"
+import { Download } from "@mui/icons-material"
+import { Button, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip } from "@mui/material"
 import moment from "moment"
 import { useEffect, useMemo, useState } from "react"
 import { setNotification } from "../Util"
-import CustomModal from "../components/CustomModal"
-import ImageViewer from "../components/ImageViewer"
 import MainPage from "../components/MainPage"
 import SearchControl from "../components/SearchControl"
 import { Category } from "../types/category/Category"
@@ -34,8 +33,6 @@ export default function Data() {
     })
     const [categorys, setCategorys] = useState<Category[]>([])
     const [lockers, setLockers] = useState<Locker[]>([])
-    const [isModalPreviewOpen, setIsModalPreviewOpen] = useState<boolean>(false)
-    const [filePreview, setFilePreview] = useState<File | undefined>(undefined)
 
     const [isStatic, setIsStatic] = useState<boolean>(false)
     useEffect(() => setIsStatic(true), [])
@@ -132,44 +129,6 @@ export default function Data() {
             })
     }
 
-    const handlePreview = (data: DataType): void => {
-        const { id } = data
-        useCaseFactory.useDownloadFileUseCase().execute(id)
-            .subscribe({
-                next: (response: File) => {
-                    setFilePreview(response)
-                },
-                error: (error) => {
-                    setNotification({
-                        icon: "error",
-                        message: error.response.data.errorSchema?.errorMessage ?? error.response.statusText
-                    })
-                }
-            })
-    }
-
-    const displayPreviewModal = () => {
-        return <CustomModal
-            title="Preview"
-            open={isModalPreviewOpen}
-            onClose={() => setIsModalPreviewOpen(false)}
-            size="large"
-        >
-            {filePreview ?
-                <Stack
-                    maxWidth="100%"
-                    maxHeight="calc(100vh - 12rem)"
-                    border={2}
-                    borderColor="#808080"
-                >
-                    {filePreview.type.startsWith("image/") ? <ImageViewer file={filePreview} /> : <Typography>PDF Viewer is under maintenance</Typography>}
-                </Stack>
-                :
-                <Typography>File Loading ...</Typography>
-            }
-        </CustomModal>
-    }
-
     return <MainPage
         title="Data"
     >
@@ -181,7 +140,6 @@ export default function Data() {
             doSearch={() => loadData()}
         />
         <br />
-        {displayPreviewModal()}
         <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
@@ -273,21 +231,17 @@ export default function Data() {
                                         columnGap={2}
                                         justifyContent="center"
                                     >
-                                        <Button
-                                            variant="contained"
-                                            onClick={() => {
-                                                handlePreview(data)
-                                                setIsModalPreviewOpen(true)
-                                            }}
+                                        <Tooltip
+                                            title="Download"
+                                            arrow
                                         >
-                                            Preview
-                                        </Button>
-                                        <Button
-                                            variant="contained"
-                                            onClick={() => handleDownload(data)}
-                                        >
-                                            Download
-                                        </Button>
+                                            <Button
+                                                variant="contained"
+                                                onClick={() => handleDownload(data)}
+                                            >
+                                                <Download />
+                                            </Button>
+                                        </Tooltip>
                                     </Stack>
                                 </TableCell>
                             </TableRow>

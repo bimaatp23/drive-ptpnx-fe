@@ -261,14 +261,18 @@ export default function Locker() {
     }
 
     const handleCreateOnEnter = (e: KeyboardEvent<HTMLDivElement>): void => {
-        if (e.key === "Enter") {
-            doCreateLocker()
+        if (isCreateReady()) {
+            if (e.key === "Enter") {
+                doCreateLocker()
+            }
         }
     }
 
     const handleUpdateOnEnter = (e: KeyboardEvent<HTMLDivElement>): void => {
-        if (e.key === "Enter") {
-            doUpdateLocker()
+        if (isUpdateReady()) {
+            if (e.key === "Enter") {
+                doUpdateLocker()
+            }
         }
     }
 

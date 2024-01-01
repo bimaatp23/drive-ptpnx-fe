@@ -1,15 +1,21 @@
-import { Download } from "@mui/icons-material"
-import { Button, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip } from "@mui/material"
+import { Download, Edit } from "@mui/icons-material"
+import { Button, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Tooltip } from "@mui/material"
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers"
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns"
 import moment from "moment"
-import { useEffect, useMemo, useState } from "react"
+import { ChangeEvent, KeyboardEvent, useEffect, useMemo, useState } from "react"
+import { finalize } from "rxjs"
 import { setNotification } from "../Util"
+import CustomModal from "../components/CustomModal"
 import MainPage from "../components/MainPage"
 import SearchControl from "../components/SearchControl"
+import { BaseResp } from "../types/BaseResp"
 import { Category } from "../types/category/Category"
 import { GetCategorysResp } from "../types/category/GetCategorysResp"
 import { Data as DataType } from "../types/data/Data"
 import { GetDatasReq } from "../types/data/GetDatasReq"
 import { GetDatasResp } from "../types/data/GetDatasResp"
+import { UpdateDataReq } from "../types/data/UpdateDataReq"
 import { GetLockersResp } from "../types/locker/GetLockersResp"
 import { Locker } from "../types/locker/Locker"
 import { UseCaseFactory, UseCaseFactoryImpl } from "../usecase/UseCaseFactory"
@@ -33,6 +39,13 @@ export default function Data() {
     })
     const [categorys, setCategorys] = useState<Category[]>([])
     const [lockers, setLockers] = useState<Locker[]>([])
+    const [updateDataReq, setUpdateDataReq] = useState<UpdateDataReq>({
+        id: "",
+        date: "",
+        documentNumber: "",
+        description: ""
+    })
+    const [isModalUpdateOpen, setIsModalUpdateOpen] = useState<boolean>(false)
 
     const [isStatic, setIsStatic] = useState<boolean>(false)
     useEffect(() => setIsStatic(true), [])
@@ -129,9 +142,115 @@ export default function Data() {
             })
     }
 
+    const doUpdateData = (): void => {
+        useCaseFactory.useUpdateDataUseCase().execute(updateDataReq)
+            .pipe(
+                finalize(() => {
+                    setIsModalUpdateOpen(false)
+                    loadData()
+                })
+            )
+            .subscribe({
+                next: (response: BaseResp) => {
+                    if (response.errorSchema.errorCode === 200) {
+                        setNotification({
+                            icon: "success",
+                            message: response.errorSchema.errorMessage
+                        })
+                    }
+                },
+                error: (error) => {
+                    setNotification({
+                        icon: "error",
+                        message: error.response.data.errorSchema?.errorMessage ?? error.response.statusText
+                    })
+                }
+            })
+    }
+
+    const displayUpdateModal = () => {
+        return <CustomModal
+            title="Edit Data"
+            open={isModalUpdateOpen}
+            onClose={() => setIsModalUpdateOpen(false)}
+            size="small"
+        >
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DatePicker
+                    label="Tanggal"
+                    format="dd/MM/yyyy"
+                    value={new Date(updateDataReq.date)}
+                    onChange={(value: Date | null) => {
+                        if (value) {
+                            setUpdateDataReq({
+                                ...updateDataReq,
+                                date: moment(value).format("YYYY-MM-DD")
+                            })
+                        }
+                    }}
+                    slotProps={{
+                        textField: {
+                            size: "small",
+                            fullWidth: true
+                        }
+                    }}
+                    sx={{ background: "white" }}
+                />
+            </LocalizationProvider>
+            <TextField
+                size="small"
+                id="documentNumber"
+                label="No Dokumen"
+                fullWidth
+                value={updateDataReq.documentNumber}
+                onChange={handleUpdateOnChange}
+                onKeyDown={handleUpdateOnEnter}
+            />
+            <TextField
+                size="small"
+                id="description"
+                label="Keterangan"
+                fullWidth
+                value={updateDataReq.description}
+                onChange={handleUpdateOnChange}
+                onKeyDown={handleUpdateOnEnter}
+            />
+            <Button
+                variant="contained"
+                onClick={doUpdateData}
+                disabled={!isUpdateReady()}
+            >
+                Simpan
+            </Button>
+        </CustomModal>
+    }
+
+    const handleUpdateOnChange = (e: ChangeEvent<HTMLInputElement>): void => {
+        setUpdateDataReq({
+            ...updateDataReq,
+            [e.target.id]: e.target.value
+        })
+    }
+
+    const handleUpdateOnEnter = (e: KeyboardEvent<HTMLDivElement>): void => {
+        if (isUpdateReady()) {
+            if (e.key === "Enter") {
+                doUpdateData()
+            }
+        }
+    }
+
+    const isUpdateReady = (): boolean => {
+        return updateDataReq.id !== "" &&
+            updateDataReq.date !== "" &&
+            updateDataReq.documentNumber !== "" &&
+            updateDataReq.description !== ""
+    }
+
     return <MainPage
         title="Data"
     >
+        {displayUpdateModal()}
         <SearchControl
             getDatasReq={getDatasReq}
             categorys={categorys}
@@ -240,6 +359,25 @@ export default function Data() {
                                                 onClick={() => handleDownload(data)}
                                             >
                                                 <Download />
+                                            </Button>
+                                        </Tooltip>
+                                        <Tooltip
+                                            title="Edit"
+                                            arrow
+                                        >
+                                            <Button
+                                                variant="contained"
+                                                onClick={() => {
+                                                    setUpdateDataReq({
+                                                        id: data.id,
+                                                        date: data.date,
+                                                        documentNumber: data.documentNumber,
+                                                        description: data.description
+                                                    })
+                                                    setIsModalUpdateOpen(true)
+                                                }}
+                                            >
+                                                <Edit />
                                             </Button>
                                         </Tooltip>
                                     </Stack>

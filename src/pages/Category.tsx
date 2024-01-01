@@ -238,14 +238,18 @@ export default function Category() {
     }
 
     const handleCreateOnEnter = (e: KeyboardEvent<HTMLDivElement>): void => {
-        if (e.key === "Enter") {
-            doCreateCategory()
+        if (isCreateReady()) {
+            if (e.key === "Enter") {
+                doCreateCategory()
+            }
         }
     }
 
     const handleUpdateOnEnter = (e: KeyboardEvent<HTMLDivElement>): void => {
-        if (e.key === "Enter") {
-            doUpdateCategory()
+        if (isUpdateReady()) {
+            if (e.key === "Enter") {
+                doUpdateCategory()
+            }
         }
     }
 

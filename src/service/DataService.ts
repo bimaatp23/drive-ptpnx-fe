@@ -3,6 +3,7 @@ import { removeEmptyParams } from "../Util"
 import { BaseResp } from "../types/BaseResp"
 import { GetDatasReq } from "../types/data/GetDatasReq"
 import { GetDatasResp } from "../types/data/GetDatasResp"
+import { UpdateDataReq } from "../types/data/UpdateDataReq"
 import { UploadDataReq } from "../types/data/UploadDataReq"
 import { BaseService, BaseServiceImpl } from "./BaseService"
 
@@ -45,6 +46,13 @@ export class DataService {
                     const file: File = new File([response.data], filename, { type: contentType ?? "application/octet-stream" })
                     return file
                 })
+            )
+    }
+
+    update(updateDataReq: UpdateDataReq): Observable<BaseResp> {
+        return from(this.baseService.httpPut(this.endPoint + "/" + updateDataReq.id, updateDataReq))
+            .pipe(
+                map((response) => response.data as BaseResp)
             )
     }
 }

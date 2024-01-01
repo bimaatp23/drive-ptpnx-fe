@@ -4,6 +4,7 @@ import { GetCategorysUseCase, GetCategorysUseCaseImpl } from "./category/GetCate
 import { UpdateCategoryUseCase, UpdateCategoryUseCaseImpl } from "./category/UpdateCategoryUseCase"
 import { DownloadFileUseCase, DownloadFileUseCaseImpl } from "./data/DownloadFileUseCase"
 import { GetDatasUseCase, GetDatasUseCaseImpl } from "./data/GetDatasUseCase"
+import { UpdateDataUseCase, UpdateDataUseCaseImpl } from "./data/UpdateDataUseCase"
 import { UploadDataUseCase, UploadDataUseCaseImpl } from "./data/UploadDataUseCase"
 import { CreateLockerUseCase, CreateLockerUseCaseImpl } from "./locker/CreateLockerUseCase"
 import { DeleteLockerUseCase, DeleteLockerUseCaseImpl } from "./locker/DeleteLockerUseCase"
@@ -22,6 +23,7 @@ export interface UseCaseFactory {
     useGetDatasUseCase(): GetDatasUseCase
     useUploadDataUseCase(): UploadDataUseCase
     useDownloadFileUseCase(): DownloadFileUseCase
+    useUpdateDataUseCase(): UpdateDataUseCase
     // Category
     useGetCategorysUseCase(): GetCategorysUseCase
     useCreateCategoryUseCase(): CreateCategoryUseCase
@@ -54,6 +56,9 @@ export class UseCaseFactoryImpl implements UseCaseFactory {
     }
     useDownloadFileUseCase(): DownloadFileUseCase {
         return new DownloadFileUseCaseImpl()
+    }
+    useUpdateDataUseCase(): UpdateDataUseCase {
+        return new UpdateDataUseCaseImpl()
     }
     // Category
     useGetCategorysUseCase(): GetCategorysUseCase {

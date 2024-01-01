@@ -1,6 +1,7 @@
 import { Observable, from, map } from "rxjs"
 import { removeEmptyParams } from "../Util"
 import { BaseResp } from "../types/BaseResp"
+import { DeleteDataReq } from "../types/data/DeleteDataReq"
 import { GetDatasReq } from "../types/data/GetDatasReq"
 import { GetDatasResp } from "../types/data/GetDatasResp"
 import { UpdateDataReq } from "../types/data/UpdateDataReq"
@@ -51,6 +52,13 @@ export class DataService {
 
     update(updateDataReq: UpdateDataReq): Observable<BaseResp> {
         return from(this.baseService.httpPut(this.endPoint + "/" + updateDataReq.id, updateDataReq))
+            .pipe(
+                map((response) => response.data as BaseResp)
+            )
+    }
+
+    remove(deleteDataReq: DeleteDataReq): Observable<BaseResp> {
+        return from(this.baseService.httpDelete(this.endPoint + "/" + deleteDataReq.id))
             .pipe(
                 map((response) => response.data as BaseResp)
             )

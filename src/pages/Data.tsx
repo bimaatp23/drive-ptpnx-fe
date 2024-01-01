@@ -1,5 +1,5 @@
-import { Download, Edit } from "@mui/icons-material"
-import { Button, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Tooltip } from "@mui/material"
+import { Delete, Download, Edit } from "@mui/icons-material"
+import { Button, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Tooltip, Typography } from "@mui/material"
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers"
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns"
 import moment from "moment"
@@ -13,6 +13,7 @@ import { BaseResp } from "../types/BaseResp"
 import { Category } from "../types/category/Category"
 import { GetCategorysResp } from "../types/category/GetCategorysResp"
 import { Data as DataType } from "../types/data/Data"
+import { DeleteDataReq } from "../types/data/DeleteDataReq"
 import { GetDatasReq } from "../types/data/GetDatasReq"
 import { GetDatasResp } from "../types/data/GetDatasResp"
 import { UpdateDataReq } from "../types/data/UpdateDataReq"
@@ -45,7 +46,11 @@ export default function Data() {
         documentNumber: "",
         description: ""
     })
+    const [deleteDataReq, setDeleteDataReq] = useState<DeleteDataReq>({
+        id: ""
+    })
     const [isModalUpdateOpen, setIsModalUpdateOpen] = useState<boolean>(false)
+    const [isModalDeleteOpen, setIsModalDeleteOpen] = useState<boolean>(false)
 
     const [isStatic, setIsStatic] = useState<boolean>(false)
     useEffect(() => setIsStatic(true), [])
@@ -168,6 +173,32 @@ export default function Data() {
             })
     }
 
+    const doDeleteData = (): void => {
+        useCaseFactory.useDeleteDataUseCase().execute(deleteDataReq)
+            .pipe(
+                finalize(() => {
+                    setIsModalDeleteOpen(false)
+                    loadData()
+                })
+            )
+            .subscribe({
+                next: (response: BaseResp) => {
+                    if (response.errorSchema.errorCode === 200) {
+                        setNotification({
+                            icon: "success",
+                            message: response.errorSchema.errorMessage
+                        })
+                    }
+                },
+                error: (error) => {
+                    setNotification({
+                        icon: "error",
+                        message: error.response.data.errorSchema?.errorMessage ?? error.response.statusText
+                    })
+                }
+            })
+    }
+
     const displayUpdateModal = () => {
         return <CustomModal
             title="Edit Data"
@@ -225,6 +256,28 @@ export default function Data() {
         </CustomModal>
     }
 
+    const displayDeleteModal = () => {
+        return <CustomModal
+            title="Hapus Data"
+            open={isModalDeleteOpen}
+            onClose={() => setIsModalDeleteOpen(false)}
+            size="small"
+        >
+            <Typography
+                fontWeight="bold"
+            >
+                Yakin hapus data ini ?
+            </Typography>
+            <Button
+                variant="contained"
+                color="error"
+                onClick={doDeleteData}
+            >
+                Hapus
+            </Button>
+        </CustomModal>
+    }
+
     const handleUpdateOnChange = (e: ChangeEvent<HTMLInputElement>): void => {
         setUpdateDataReq({
             ...updateDataReq,
@@ -251,6 +304,7 @@ export default function Data() {
         title="Data"
     >
         {displayUpdateModal()}
+        {displayDeleteModal()}
         <SearchControl
             getDatasReq={getDatasReq}
             categorys={categorys}
@@ -356,6 +410,7 @@ export default function Data() {
                                         >
                                             <Button
                                                 variant="contained"
+                                                color="success"
                                                 onClick={() => handleDownload(data)}
                                             >
                                                 <Download />
@@ -378,6 +433,23 @@ export default function Data() {
                                                 }}
                                             >
                                                 <Edit />
+                                            </Button>
+                                        </Tooltip>
+                                        <Tooltip
+                                            title="Hapus"
+                                            arrow
+                                        >
+                                            <Button
+                                                variant="contained"
+                                                color="error"
+                                                onClick={() => {
+                                                    setDeleteDataReq({
+                                                        id: data.id
+                                                    })
+                                                    setIsModalDeleteOpen(true)
+                                                }}
+                                            >
+                                                <Delete />
                                             </Button>
                                         </Tooltip>
                                     </Stack>

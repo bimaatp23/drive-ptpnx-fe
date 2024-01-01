@@ -168,6 +168,7 @@ export default function Category() {
             <Button
                 variant="contained"
                 onClick={doCreateCategory}
+                disabled={!isCreateReady()}
             >
                 Tambah
             </Button>
@@ -193,6 +194,7 @@ export default function Category() {
             <Button
                 variant="contained"
                 onClick={doUpdateCategory}
+                disabled={!isUpdateReady()}
             >
                 Simpan
             </Button>
@@ -245,6 +247,15 @@ export default function Category() {
         if (e.key === "Enter") {
             doUpdateCategory()
         }
+    }
+
+    const isCreateReady = (): boolean => {
+        return createCategoryReq.name !== ""
+    }
+
+    const isUpdateReady = (): boolean => {
+        return updateCategoryReq.id !== "" &&
+            updateCategoryReq.name !== ""
     }
 
     return <MainPage

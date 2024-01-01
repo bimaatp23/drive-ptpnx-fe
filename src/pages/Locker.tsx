@@ -181,6 +181,7 @@ export default function Locker() {
             <Button
                 variant="contained"
                 onClick={doCreateLocker}
+                disabled={!isCreateReady()}
             >
                 Tambah
             </Button>
@@ -216,6 +217,7 @@ export default function Locker() {
             <Button
                 variant="contained"
                 onClick={doUpdateLocker}
+                disabled={!isUpdateReady()}
             >
                 Simpan
             </Button>
@@ -268,6 +270,17 @@ export default function Locker() {
         if (e.key === "Enter") {
             doUpdateLocker()
         }
+    }
+
+    const isCreateReady = (): boolean => {
+        return createLockerReq.name !== "" &&
+            createLockerReq.capacity > 0
+    }
+
+    const isUpdateReady = (): boolean => {
+        return updateLockerReq.id !== "" &&
+            updateLockerReq.name !== "" &&
+            updateLockerReq.capacity > 0
     }
 
     return <MainPage

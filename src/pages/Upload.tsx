@@ -8,11 +8,9 @@ import ImageViewer from "../components/ImageViewer"
 import MainPage from "../components/MainPage"
 import PDFViewer from "../components/PDFViewer"
 import { BaseResp } from "../types/BaseResp"
-import { Category } from "../types/category/Category"
-import { GetCategorysResp } from "../types/category/GetCategorysResp"
+import { GetCategory, GetCategorysResp } from "../types/category/GetCategorysResp"
 import { UploadDataReq } from "../types/data/UploadDataReq"
-import { GetLockersResp } from "../types/locker/GetLockersResp"
-import { Locker } from "../types/locker/Locker"
+import { GetLocker, GetLockersResp } from "../types/locker/GetLockersResp"
 import { UseCaseFactory, UseCaseFactoryImpl } from "../usecase/UseCaseFactory"
 
 export default function Upload() {
@@ -26,8 +24,8 @@ export default function Upload() {
         file: undefined
     })
     const [fileValue, setFileValue] = useState<string>("")
-    const [categorys, setCategorys] = useState<Category[]>([])
-    const [lockers, setLockers] = useState<Locker[]>([])
+    const [categorys, setCategorys] = useState<GetCategory[]>([])
+    const [lockers, setLockers] = useState<GetLocker[]>([])
 
     const [isStatic, setIsStatic] = useState<boolean>(false)
     useEffect(() => setIsStatic(true), [])
@@ -112,7 +110,7 @@ export default function Upload() {
                         icon: "success",
                         message: response.errorSchema.errorMessage
                     })
-                    window.location.assign("/data")
+                    window.location.reload()
                 },
                 error: (error) => {
                     setNotification({
@@ -121,6 +119,15 @@ export default function Upload() {
                     })
                 }
             })
+    }
+
+    const isUploadReady = (): boolean => {
+        return uploadDataReq.date !== "" &&
+            uploadDataReq.documentNumber !== "" &&
+            uploadDataReq.description !== "" &&
+            uploadDataReq.categoryId !== "" &&
+            uploadDataReq.lockerId !== "" &&
+            uploadDataReq.file !== undefined
     }
 
     return <MainPage
@@ -200,7 +207,7 @@ export default function Upload() {
                     sx={{ background: "white" }}
                 >
                     {lockers.map((locker) => {
-                        return <MenuItem value={locker.id}>{locker.name}</MenuItem>
+                        return <MenuItem value={locker.id}>{locker.name} ({locker.capacity - locker.usageCount})</MenuItem>
                     })}
                 </Select>
             </FormControl>
@@ -218,6 +225,7 @@ export default function Upload() {
                 variant="contained"
                 fullWidth
                 onClick={handleUpload}
+                disabled={!isUploadReady()}
             >
                 Upload
             </Button>

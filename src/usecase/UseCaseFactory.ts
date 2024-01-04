@@ -7,6 +7,10 @@ import { DownloadFileUseCase, DownloadFileUseCaseImpl } from "./data/DownloadFil
 import { GetDatasUseCase, GetDatasUseCaseImpl } from "./data/GetDatasUseCase"
 import { UpdateDataUseCase, UpdateDataUseCaseImpl } from "./data/UpdateDataUseCase"
 import { UploadDataUseCase, UploadDataUseCaseImpl } from "./data/UploadDataUseCase"
+import { CreateEmployeeUseCase, CreateEmployeeUseCaseImpl } from "./employee/CreateEmployeeReq"
+import { DeleteEmployeeUseCase, DeleteEmployeeUseCaseImpl } from "./employee/DeleteEmployeeUseCase"
+import { GetEmployeesUseCase, GetEmployeesUseCaseImpl } from "./employee/GetEmployeesUseCase"
+import { UpdateEmployeeUseCase, UpdateEmployeeUseCaseImpl } from "./employee/UpdateLockerUseCase"
 import { CreateLockerUseCase, CreateLockerUseCaseImpl } from "./locker/CreateLockerUseCase"
 import { DeleteLockerUseCase, DeleteLockerUseCaseImpl } from "./locker/DeleteLockerUseCase"
 import { GetLockersUseCase, GetLockersUseCaseImpl } from "./locker/GetLockersUseCase"
@@ -36,6 +40,11 @@ export interface UseCaseFactory {
     useCreateLockerUseCase(): CreateLockerUseCase
     useUpdateLockerUseCase(): UpdateLockerUseCase
     useDeleteLockerUseCase(): DeleteLockerUseCase
+    // Employee
+    useGetEmployeesUseCase(): GetEmployeesUseCase
+    useCreateEmployeeUseCase(): CreateEmployeeUseCase
+    useUpdateEmployeeUseCase(): UpdateEmployeeUseCase
+    useDeleteEmployeeUseCase(): DeleteEmployeeUseCase
 }
 
 export class UseCaseFactoryImpl implements UseCaseFactory {
@@ -90,5 +99,18 @@ export class UseCaseFactoryImpl implements UseCaseFactory {
     }
     useDeleteLockerUseCase(): DeleteLockerUseCase {
         return new DeleteLockerUseCaseImpl()
+    }
+    // Employee
+    useGetEmployeesUseCase(): GetEmployeesUseCase {
+        return new GetEmployeesUseCaseImpl()
+    }
+    useCreateEmployeeUseCase(): CreateEmployeeUseCase {
+        return new CreateEmployeeUseCaseImpl()
+    }
+    useUpdateEmployeeUseCase(): UpdateEmployeeUseCase {
+        return new UpdateEmployeeUseCaseImpl()
+    }
+    useDeleteEmployeeUseCase(): DeleteEmployeeUseCase {
+        return new DeleteEmployeeUseCaseImpl()
     }
 }

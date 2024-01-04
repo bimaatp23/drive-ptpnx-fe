@@ -4,6 +4,7 @@ import Category from "./pages/Category"
 import ChangePassword from "./pages/ChangePassword"
 import Dashboard from "./pages/Dashboard"
 import Data from "./pages/Data"
+import Employee from "./pages/Employee"
 import Locker from "./pages/Locker"
 import Login from "./pages/Login"
 import Upload from "./pages/Upload"
@@ -46,6 +47,7 @@ export default function App() {
     middlewareIsLogin("/data", <Data />),
     middlewareIsLogin("/category", <Category />),
     middlewareIsLogin("/locker", <Locker />),
+    middlewareIsLogin("/employee", <Employee />),
     middlewareIsLogin("/change-password", <ChangePassword />),
     middlewareIsNotLogin("/login", <Login />)
   ])

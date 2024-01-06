@@ -85,6 +85,10 @@ export default function Sidebar(props: Props) {
                 {
                     path: "/employee",
                     label: "Karyawan"
+                },
+                {
+                    path: "/loan",
+                    label: "Peminjaman"
                 }
             ])}
         </Stack>

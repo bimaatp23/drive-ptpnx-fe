@@ -11,6 +11,10 @@ import { CreateEmployeeUseCase, CreateEmployeeUseCaseImpl } from "./employee/Cre
 import { DeleteEmployeeUseCase, DeleteEmployeeUseCaseImpl } from "./employee/DeleteEmployeeUseCase"
 import { GetEmployeesUseCase, GetEmployeesUseCaseImpl } from "./employee/GetEmployeesUseCase"
 import { UpdateEmployeeUseCase, UpdateEmployeeUseCaseImpl } from "./employee/UpdateLockerUseCase"
+import { CreateLoanUseCase, CreateLoanUseCaseImpl } from "./loan/CreateLoanUseCase"
+import { DeleteLoanUseCase, DeleteLoanUseCaseImpl } from "./loan/DeleteLoanUseCase"
+import { GetLoansUseCase, GetLoansUseCaseImpl } from "./loan/GetLoansUseCase"
+import { UpdateLoanUseCase, UpdateLoanUseCaseImpl } from "./loan/UpdateLoanUseCase"
 import { CreateLockerUseCase, CreateLockerUseCaseImpl } from "./locker/CreateLockerUseCase"
 import { DeleteLockerUseCase, DeleteLockerUseCaseImpl } from "./locker/DeleteLockerUseCase"
 import { GetLockersUseCase, GetLockersUseCaseImpl } from "./locker/GetLockersUseCase"
@@ -45,6 +49,11 @@ export interface UseCaseFactory {
     useCreateEmployeeUseCase(): CreateEmployeeUseCase
     useUpdateEmployeeUseCase(): UpdateEmployeeUseCase
     useDeleteEmployeeUseCase(): DeleteEmployeeUseCase
+    // Loan
+    useGetLoansUseCase(): GetLoansUseCase
+    useCreateLoanUseCase(): CreateLoanUseCase
+    useUpdateLoanUseCase(): UpdateLoanUseCase
+    useDeleteLoanUseCase(): DeleteLoanUseCase
 }
 
 export class UseCaseFactoryImpl implements UseCaseFactory {
@@ -112,5 +121,18 @@ export class UseCaseFactoryImpl implements UseCaseFactory {
     }
     useDeleteEmployeeUseCase(): DeleteEmployeeUseCase {
         return new DeleteEmployeeUseCaseImpl()
+    }
+    // Loan
+    useGetLoansUseCase(): GetLoansUseCase {
+        return new GetLoansUseCaseImpl()
+    }
+    useCreateLoanUseCase(): CreateLoanUseCase {
+        return new CreateLoanUseCaseImpl()
+    }
+    useUpdateLoanUseCase(): UpdateLoanUseCase {
+        return new UpdateLoanUseCaseImpl()
+    }
+    useDeleteLoanUseCase(): DeleteLoanUseCase {
+        return new DeleteLoanUseCaseImpl()
     }
 }

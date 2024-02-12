@@ -380,7 +380,6 @@ export default function Locker() {
                                                     })
                                                     setIsModalUpdateOpen(true)
                                                 }}
-                                                disabled={locker.usageCount > 0}
                                             >
                                                 <Edit />
                                             </Button>
@@ -398,7 +397,6 @@ export default function Locker() {
                                                     })
                                                     setIsModalDeleteOpen(true)
                                                 }}
-                                                disabled={locker.usageCount > 0}
                                             >
                                                 <Delete />
                                             </Button>

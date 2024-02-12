@@ -343,7 +343,6 @@ export default function Category() {
                                                     })
                                                     setIsModalUpdateOpen(true)
                                                 }}
-                                                disabled={category.usageCount > 0}
                                             >
                                                 <Edit />
                                             </Button>
@@ -361,7 +360,6 @@ export default function Category() {
                                                     })
                                                     setIsModalDeleteOpen(true)
                                                 }}
-                                                disabled={category.usageCount > 0}
                                             >
                                                 <Delete />
                                             </Button>

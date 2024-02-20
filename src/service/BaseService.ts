@@ -18,7 +18,8 @@ export class BaseServiceImpl implements BaseService {
     now = Math.floor(Date.now() / 1000)
     exp = this.now + 10
 
-    generatedJwt = "Bearer " + jsrsasign.KJUR.jws.JWS.sign("HS256", { alg: "HS256" }, { ...this.useCaseFactory.useSessionUseCase().get(), exp: this.exp }, process.env.REACT_APP_SECRET_KEY)
+    // generatedJwt = "Bearer " + jsrsasign.KJUR.jws.JWS.sign("HS256", { alg: "HS256" }, { ...this.useCaseFactory.useSessionUseCase().get(), exp: this.exp }, process.env.REACT_APP_SECRET_KEY)
+    generatedJwt = "Bearer " + jsrsasign.KJUR.jws.JWS.sign("HS256", { alg: "HS256" }, { ...this.useCaseFactory.useSessionUseCase().get() }, process.env.REACT_APP_SECRET_KEY)
 
     httpGet(url: string, config?: AxiosRequestConfig<any>): Promise<AxiosResponse<any, any>> {
         const defaultConfig: AxiosRequestConfig<any> = {

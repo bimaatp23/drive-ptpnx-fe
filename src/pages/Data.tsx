@@ -305,14 +305,14 @@ export default function Data() {
     >
         {displayUpdateModal()}
         {displayDeleteModal()}
-        <SearchControl
+        {/* <SearchControl
             getDatasReq={getDatasReq}
             categorys={categorys}
             lockers={lockers}
             setGetDatasReq={(value: GetDatasReq) => setGetDatasReq(value)}
             doSearch={() => loadData()}
         />
-        <br />
+        <br /> */}
         <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>

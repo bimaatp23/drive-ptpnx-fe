@@ -13,7 +13,7 @@ export interface BaseService {
 export class BaseServiceImpl implements BaseService {
     useCaseFactory: UseCaseFactory = new UseCaseFactoryImpl()
 
-    readonly endPoint = process.env.REACT_APP_API_ENDPOINT
+    readonly endPoint = process.env.REACT_APP_ENDPOINT
 
     now = Math.floor(Date.now() / 1000)
     exp = this.now + 10
